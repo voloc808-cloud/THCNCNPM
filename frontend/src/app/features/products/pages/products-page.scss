@@ -1,0 +1,141 @@
+.shop {
+  padding-block: clamp(50px, 7vw, 90px);
+  min-height: 80dvh;
+}
+.shop header {
+  text-align: center;
+}
+.eyebrow {
+  color: #b4894c;
+  font-size: 9px;
+  letter-spacing: 0.22em;
+}
+.shop h1 {
+  margin: 12px 0;
+  font: 400 clamp(44px, 6vw, 76px)/1 var(--font-serif);
+}
+.shop header > p:last-child {
+  color: #8b8378;
+}
+.filters {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin: 38px 0 26px;
+}
+.filters input,
+.filters select {
+  padding: 11px 13px;
+  color: #d8d0c5;
+  border: 1px solid #39332b;
+  background: #111;
+}
+.filters button,
+.filters a,
+.grid button,
+.pagination button {
+  padding: 11px 14px;
+  color: #161009;
+  border: 0;
+  background: #c49a5a;
+  text-decoration: none;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+.grid article {
+  display: flex;
+  flex-direction: column;
+  padding: 14px;
+  border: 1px solid #302b24;
+  background: #100f0e;
+}
+.visual {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  background: radial-gradient(circle, #3a2d1c, #15120e);
+  overflow: hidden;
+}
+.visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.visual span {
+  color: #bd9458;
+  font: 46px var(--font-serif);
+}
+.grid small {
+  margin-top: 16px;
+  color: #9b7847;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.grid h2 {
+  margin: 8px 0;
+  font: 22px var(--font-serif);
+}
+.grid h2 a {
+  color: #ddd4c8;
+  text-decoration: none;
+}
+.grid p {
+  flex: 1;
+  color: #81796e;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.grid footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 15px;
+}
+.grid strong {
+  color: #dfbd80;
+  font: 17px var(--font-serif);
+}
+.grid button:disabled,
+.pagination button:disabled {
+  opacity: 0.4;
+}
+.notice,
+.empty {
+  padding: 12px;
+  color: #9fc69d;
+  border: 1px solid #345137;
+}
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 25px;
+  color: #8b8276;
+  font-size: 11px;
+}
+@media (max-width: 1050px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 750px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 480px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

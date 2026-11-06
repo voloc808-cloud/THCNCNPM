@@ -1,0 +1,70 @@
+@use '../admin-common';
+.orders {
+  display: grid;
+  gap: 12px;
+}
+.orders article {
+  padding: 18px;
+  border: 1px solid #302a22;
+  background: #100f0e;
+}
+.orders header,
+.orders footer,
+.body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+.orders header div {
+  display: grid;
+  gap: 5px;
+}
+.orders small {
+  color: #7e766b;
+}
+.body {
+  align-items: start;
+  margin: 15px 0;
+  padding: 14px 0;
+  border-block: 1px solid #29251f;
+}
+.body p {
+  margin: 5px 0;
+  color: #a89e91;
+  font-size: 11px;
+}
+.body p strong {
+  margin-left: 8px;
+  color: #c6a46b;
+}
+.body address {
+  display: grid;
+  max-width: 420px;
+  gap: 5px;
+  color: #8b8174;
+  font-size: 11px;
+  font-style: normal;
+}
+.orders footer > strong {
+  color: #dfbd7d;
+  font: 20px var(--font-serif);
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+.actions button {
+  padding: 8px;
+  color: #cba86b;
+  border: 1px solid #4a3e2c;
+  background: transparent;
+}
+@media (max-width: 650px) {
+  .body,
+  .orders footer {
+    align-items: start;
+    flex-direction: column;
+  }
+}

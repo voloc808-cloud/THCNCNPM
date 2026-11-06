@@ -1,0 +1,120 @@
+<section class="admin-page">
+  <header class="page-head">
+    <div>
+      <p class="eyebrow">DANH MỤC</p>
+      <h1>Quản lý dịch vụ.</h1>
+      <p>Thêm, chỉnh sửa giá, thời lượng và trạng thái hiển thị.</p>
+    </div>
+    <button class="button" (click)="open()">+ Thêm dịch vụ</button>
+  </header>
+  <div class="toolbar">
+    <input [(ngModel)]="search" (keyup.enter)="load()" placeholder="Tìm tên dịch vụ..." /><button
+      class="button secondary"
+      (click)="load()"
+    >
+      Tìm kiếm
+    </button>
+  </div>
+  @if (error()) {
+    <p class="error">{{ error() }}</p>
+  }
+  @if (notice()) {
+    <p class="notice">{{ notice() }}</p>
+  }
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Dịch vụ</th>
+          <th>Giá</th>
+          <th>Thời lượng</th>
+          <th>Trạng thái</th>
+          <th>Thứ tự</th>
+          <th>Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of items(); track item.id) {
+          <tr>
+            <td>
+              <strong>{{ item.name }}</strong
+              ><br /><small>{{ item.slug }}</small>
+            </td>
+            <td>{{ item.price | currency: 'VND' : 'symbol' : '1.0-0' : 'vi-VN' }}</td>
+            <td>{{ item.durationMinutes }} phút</td>
+            <td>
+              <span class="status" [class.ACTIVE]="item.isActive">{{
+                item.isActive ? 'Hoạt động' : 'Đang ẩn'
+              }}</span>
+            </td>
+            <td>{{ item.sortOrder }}</td>
+            <td class="actions">
+              <button (click)="open(item)">Sửa</button><button (click)="remove(item)">Xóa</button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="6">{{ loading() ? 'Đang tải...' : 'Chưa có dịch vụ.' }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  @if (meta(); as m) {
+    <div class="pagination">
+      <button class="button secondary" [disabled]="m.page <= 1" (click)="load(m.page - 1)">
+        Trước</button
+      ><span>Trang {{ m.page }} / {{ m.totalPages || 1 }}</span
+      ><button
+        class="button secondary"
+        [disabled]="m.page >= m.totalPages"
+        (click)="load(m.page + 1)"
+      >
+        Sau
+      </button>
+    </div>
+  }
+  @if (editing() !== undefined) {
+    <div class="modal-backdrop" (click)="close()">
+      <form class="modal" (click)="$event.stopPropagation()" (ngSubmit)="save()">
+        <h2>{{ editing() ? 'Chỉnh sửa' : 'Thêm' }} dịch vụ</h2>
+        <div class="form-grid">
+          <label>Tên<input name="name" [(ngModel)]="form.name" required /></label
+          ><label
+            >Giá<input
+              name="price"
+              type="number"
+              [(ngModel)]="form.price"
+              min="1"
+              required /></label
+          ><label
+            >Thời lượng (phút)<input
+              name="duration"
+              type="number"
+              [(ngModel)]="form.durationMinutes"
+              min="15"
+              required /></label
+          ><label
+            >Thứ tự<input name="sort" type="number" [(ngModel)]="form.sortOrder" min="0" /></label
+          ><label class="wide">Ảnh URL<input name="image" [(ngModel)]="form.imageUrl" /></label
+          ><label class="wide"
+            >Mô tả<textarea
+              name="description"
+              [(ngModel)]="form.description"
+              required
+            ></textarea></label
+          ><label class="check wide"
+            ><input name="active" type="checkbox" [(ngModel)]="form.isActive" /> Đang hoạt
+            động</label
+          >
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="button secondary" (click)="close()">Hủy</button
+          ><button class="button" [disabled]="saving()">
+            {{ saving() ? 'Đang lưu...' : 'Lưu' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  }
+</section>

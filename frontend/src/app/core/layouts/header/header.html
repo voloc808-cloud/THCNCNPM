@@ -1,0 +1,53 @@
+<header class="header">
+  <a class="brand" href="/" aria-label="Royal Barber - Trang chủ"
+    ><span class="brand-logo" role="img" aria-label="Royal Barber Studio"></span></a
+  >
+  <button
+    class="menu-button"
+    type="button"
+    (click)="toggleMenu()"
+    [attr.aria-expanded]="menuOpen()"
+    aria-label="Mở menu"
+  >
+    <span></span><span></span><span></span>
+  </button>
+  <nav [class.open]="menuOpen()" aria-label="Điều hướng chính">
+    <a
+      routerLink="/"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      (click)="closeMenu()"
+      >Trang chủ</a
+    >
+    <a routerLink="/dich-vu" routerLinkActive="active" (click)="closeMenu()">Dịch vụ</a>
+    <a routerLink="/san-pham" routerLinkActive="active" (click)="closeMenu()">Sản phẩm</a>
+    <a routerLink="/gio-hang" routerLinkActive="active" (click)="closeMenu()">Giỏ hàng</a>
+    <a routerLink="/doi-ngu" routerLinkActive="active" (click)="closeMenu()">Đội ngũ</a>
+    @if (auth.isAuthenticated()) {
+      <a [routerLink]="auth.homeForRole()" routerLinkActive="active" (click)="closeMenu()"
+        >Bảng điều khiển @if (unreadCount()) { <span class="header-badge" [attr.aria-label]="unreadCount() + ' thông báo chưa đọc'">{{ unreadCount() }}</span> }</a
+      >
+      <button class="nav-logout" type="button" (click)="logout()">Đăng xuất</button>
+    } @else {
+      <a routerLink="/login" routerLinkActive="active" (click)="closeMenu()">Đăng nhập</a>
+    }
+    <a
+      class="book"
+      [routerLink]="
+        auth.role() === 'ADMIN'
+          ? '/admin'
+          : auth.role() === 'STAFF'
+            ? '/staff-portal'
+            : '/customer/dat-lich'
+      "
+      (click)="closeMenu()"
+      >{{
+        auth.role() === 'ADMIN'
+          ? 'Quản trị'
+          : auth.role() === 'STAFF'
+            ? 'Lịch làm việc'
+            : 'Đặt lịch'
+      }}</a
+    >
+  </nav>
+</header>

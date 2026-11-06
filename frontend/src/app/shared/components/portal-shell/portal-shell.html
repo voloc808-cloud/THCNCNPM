@@ -1,0 +1,17 @@
+<section class="portal">
+  <div class="portal-head">
+    <p class="eyebrow">{{ eyebrow() }}</p>
+    <h1>{{ title() }}</h1>
+    <p>{{ description() }}</p>
+  </div>
+  <div class="cards">
+    @for (item of items(); track item.label) {
+      <article>
+        <span>{{ item.number }}</span>
+        <h2>{{ item.label }}</h2>
+        <p>{{ item.note }}</p>
+        <small>Hoàn thiện ở giai đoạn giao diện tương ứng →</small>
+      </article>
+    }
+  </div>
+</section>

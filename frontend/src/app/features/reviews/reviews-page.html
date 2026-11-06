@@ -1,0 +1,33 @@
+<section class="reviews-page">
+  <header class="page-head">
+    <p class="eyebrow">PHẢN HỒI CỦA KHÁCH HÀNG</p>
+    <h1>Đánh giá.</h1>
+    <p>{{ auth.role() === 'ADMIN' ? 'Đánh giá dành cho đội ngũ Royal Barber.' : 'Đánh giá từ những khách hàng bạn đã phục vụ.' }}</p>
+  </header>
+  @if (error()) {
+    <p class="message">{{ error() }}</p>
+  } @else if (loading()) {
+    <p class="message">Đang tải đánh giá...</p>
+  } @else {
+    <div class="review-list">
+      @for (review of reviews(); track review.id) {
+        <article class="review-card">
+          <div class="review-top">
+            <strong>{{ review.customer.user.fullName }}</strong>
+            <span class="stars" [attr.aria-label]="review.rating + ' trên 5 sao'">{{ '★'.repeat(review.rating) }}{{ '☆'.repeat(5 - review.rating) }}</span>
+          </div>
+          <p>{{ review.comment || 'Khách hàng không để lại nhận xét.' }}</p>
+          <div class="review-meta">
+            <span>Lịch hẹn {{ review.appointment.code }} · {{ review.appointment.startAt | date: 'dd/MM/yyyy HH:mm' }}</span>
+            @if (auth.role() === 'ADMIN') {
+              <span>Thợ: {{ review.staff.user.fullName }}</span>
+            }
+            <span>Đánh giá ngày {{ review.createdAt | date: 'dd/MM/yyyy' }}</span>
+          </div>
+        </article>
+      } @empty {
+        <p class="message">Chưa có đánh giá nào.</p>
+      }
+    </div>
+  }
+</section>

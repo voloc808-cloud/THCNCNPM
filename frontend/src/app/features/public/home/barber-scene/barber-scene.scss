@@ -1,0 +1,94 @@
+:host {
+  position: fixed;
+  z-index: 0;
+  inset: 76px 0 0;
+  display: block;
+  pointer-events: none;
+}
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.8s;
+}
+.ready canvas {
+  opacity: 1;
+}
+.loader {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  background: #090909;
+  transition: opacity 0.6s;
+}
+.ready .loader {
+  opacity: 0;
+}
+.loader-mark {
+  display: grid;
+  place-items: center;
+  width: 75px;
+  height: 75px;
+  border: 1px solid #a77b39;
+  transform: rotate(45deg);
+  font: 400 17px var(--font-serif);
+  color: #d6ae6c;
+}
+.loader > div {
+  width: 180px;
+  height: 1px;
+  margin-top: 50px;
+  background: #29231b;
+}
+.loader i {
+  display: block;
+  height: 100%;
+  background: #c99b50;
+  transition: width 0.3s;
+}
+.loader p {
+  margin-top: 15px;
+  color: #72695e;
+  font-size: 9px;
+  letter-spacing: 0.23em;
+  text-transform: uppercase;
+}
+.fallback {
+  position: absolute;
+  inset: 0;
+  display: none;
+  place-content: center;
+  grid-template-columns: auto 1px auto;
+  gap: 30px;
+  align-items: center;
+  background: radial-gradient(circle, #2d2112, transparent 42%);
+}
+.failed .fallback {
+  display: grid;
+}
+.fallback span {
+  font: 400 28vw var(--font-serif);
+  color: #3f301d;
+}
+.fallback i {
+  height: 36vh;
+  background: #8f6b37;
+}
+@media (max-width: 720px) {
+  :host {
+    opacity: 0.55;
+    left: 15%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  :host {
+    opacity: 0.38;
+  }
+  .loader i {
+    transition: none;
+  }
+}

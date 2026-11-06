@@ -1,0 +1,134 @@
+<section class="admin-page">
+  <header class="page-head">
+    <div>
+      <p class="eyebrow">KHÁCH HÀNG</p>
+      <h1>Hồ sơ khách hàng.</h1>
+      <p>Quản lý tài khoản, điểm thành viên và lịch sử tương tác.</p>
+    </div>
+    <button class="button" (click)="open()">+ Thêm khách hàng</button>
+  </header>
+  <div class="toolbar">
+    <input
+      [(ngModel)]="search"
+      (keyup.enter)="load()"
+      placeholder="Tên, email, số điện thoại..."
+    /><button class="button secondary" (click)="load()">Tìm</button>
+  </div>
+  @if (error()) {
+    <p class="error">{{ error() }}</p>
+  }
+  @if (notice()) {
+    <p class="notice">{{ notice() }}</p>
+  }
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Khách hàng</th>
+          <th>Liên hệ</th>
+          <th>Thành viên từ</th>
+          <th>Điểm</th>
+          <th>Lịch hẹn</th>
+          <th>Trạng thái</th>
+          <th>Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of items(); track item.id) {
+          <tr>
+            <td>
+              <strong>{{ item.user.fullName }}</strong
+              ><br /><small>{{ item.user.email }}</small>
+            </td>
+            <td>{{ item.user.phone || '—' }}</td>
+            <td>{{ item.user.createdAt | date: 'dd/MM/yyyy' }}</td>
+            <td>{{ item.loyaltyPoint }}</td>
+            <td>{{ item._count.appointments }}</td>
+            <td>
+              <span class="status {{ item.user.status }}">{{ item.user.status }}</span>
+            </td>
+            <td class="actions">
+              <button (click)="open(item)">Sửa</button><button (click)="openPassword(item)">Đổi mật khẩu</button><button (click)="remove(item)">Xóa</button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="7">{{ loading() ? 'Đang tải...' : 'Chưa có khách hàng.' }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  @if (meta(); as m) {
+    <div class="pagination">
+      <button class="button secondary" [disabled]="m.page <= 1" (click)="load(m.page - 1)">
+        Trước</button
+      ><span>{{ m.page }} / {{ m.totalPages || 1 }}</span
+      ><button
+        class="button secondary"
+        [disabled]="m.page >= m.totalPages"
+        (click)="load(m.page + 1)"
+      >
+        Sau
+      </button>
+    </div>
+  }
+  @if (editing() !== undefined) {
+    <div class="modal-backdrop" (click)="close()">
+      <form class="modal" (click)="$event.stopPropagation()" (ngSubmit)="save()">
+        <h2>{{ editing() ? 'Chỉnh sửa' : 'Thêm' }} khách hàng</h2>
+        <div class="form-grid">
+          <label>Họ tên<input name="name" [(ngModel)]="form.fullName" required /></label>
+          @if (!editing()) {
+            <label>Email<input name="email" type="email" [(ngModel)]="form.email" required /></label
+            ><label
+              >Mật khẩu<input name="password" type="password" [(ngModel)]="form.password" required
+            /></label>
+          }
+          <label>Điện thoại<input name="phone" [(ngModel)]="form.phone" /></label
+          ><label>Ngày sinh<input name="dob" type="date" [(ngModel)]="form.dateOfBirth" /></label>
+          @if (editing()) {
+            <label
+              >Điểm thành viên<input
+                name="points"
+                type="number"
+                min="0"
+                [(ngModel)]="form.loyaltyPoint" /></label
+            ><label
+              >Trạng thái<select name="status" [(ngModel)]="form.status">
+                <option value="ACTIVE">Hoạt động</option>
+                <option value="INACTIVE">Tạm ngưng</option>
+                <option value="BLOCKED">Bị khóa</option>
+              </select></label
+            >
+          }
+          <label class="wide"
+            >Ghi chú<textarea name="notes" [(ngModel)]="form.notes"></textarea>
+          </label>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="button secondary" (click)="close()">Hủy</button
+          ><button class="button" [disabled]="saving()">Lưu</button>
+        </div>
+      </form>
+    </div>
+  }
+  @if (passwordTarget(); as customer) {
+    <div class="modal-backdrop" (click)="closePassword()">
+      <form class="modal password-modal" (click)="$event.stopPropagation()" (ngSubmit)="setPassword()">
+        <h2>Đổi mật khẩu</h2>
+        <p class="password-customer">{{ customer.user.fullName }} · {{ customer.user.email }}</p>
+        @if (passwordError()) { <p class="error">{{ passwordError() }}</p> }
+        <div class="form-grid">
+          <label class="wide">Mật khẩu mới<input name="newPassword" type="password" [(ngModel)]="newPassword" autocomplete="new-password" required minlength="8" maxlength="72" /></label>
+          <label class="wide">Xác nhận mật khẩu<input name="confirmPassword" type="password" [(ngModel)]="confirmPassword" autocomplete="new-password" required /></label>
+        </div>
+        <p class="password-hint">Ít nhất 8 ký tự, gồm chữ hoa, chữ thường và số. Các mã làm mới phiên đăng nhập cũ sẽ bị thu hồi.</p>
+        <div class="modal-actions">
+          <button type="button" class="button secondary" (click)="closePassword()">Hủy</button>
+          <button class="button" [disabled]="changingPassword()">{{ changingPassword() ? 'Đang lưu...' : 'Đổi mật khẩu' }}</button>
+        </div>
+      </form>
+    </div>
+  }
+</section>

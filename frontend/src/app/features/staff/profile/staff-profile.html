@@ -1,0 +1,67 @@
+<section class="staff-page">
+  <header class="page-head">
+    <div>
+      <p class="eyebrow">TÀI KHOẢN</p>
+      <h1>Hồ sơ nhân viên.</h1>
+      <p>Cập nhật thông tin chuyên môn và bảo mật tài khoản.</p>
+    </div>
+  </header>
+  @if (error()) {
+    <p class="error">{{ error() }}</p>
+  }
+  @if (notice()) {
+    <p class="notice">{{ notice() }}</p>
+  }
+  @if (loading()) {
+    <p class="empty">Đang tải hồ sơ...</p>
+  } @else {
+    <div class="profile-grid">
+      <form class="panel" (ngSubmit)="save()">
+        <h2>Thông tin cá nhân</h2>
+        <div class="form-grid">
+          <label>Họ tên<input name="name" [(ngModel)]="fullName" required /></label
+          ><label>Email<input [value]="email" disabled /></label
+          ><label>Điện thoại<input name="phone" [(ngModel)]="phone" /></label
+          ><label
+            >Kinh nghiệm (năm)<input
+              name="years"
+              type="number"
+              min="0"
+              [(ngModel)]="yearsOfExperience" /></label
+          ><label class="wide"
+            >Ảnh đại diện URL<input name="avatar" [(ngModel)]="avatarUrl" /></label
+          ><label class="wide"
+            >Chuyên môn<input name="specialties" [(ngModel)]="specialties" /></label
+          ><label class="wide">Giới thiệu<textarea name="bio" [(ngModel)]="bio"></textarea></label>
+        </div>
+        <button class="button" [disabled]="saving()">Lưu hồ sơ</button>
+      </form>
+      <form class="panel" (ngSubmit)="changePassword()">
+        <h2>Đổi mật khẩu</h2>
+        <div class="form-grid password">
+          <label class="wide"
+            >Mật khẩu hiện tại<input
+              name="current"
+              type="password"
+              [(ngModel)]="currentPassword"
+              required /></label
+          ><label class="wide"
+            >Mật khẩu mới<input
+              name="new"
+              type="password"
+              [(ngModel)]="newPassword"
+              minlength="8"
+              required /></label
+          ><label class="wide"
+            >Xác nhận mật khẩu<input
+              name="confirm"
+              type="password"
+              [(ngModel)]="confirmPassword"
+              required
+          /></label>
+        </div>
+        <button class="button" [disabled]="saving()">Đổi mật khẩu</button>
+      </form>
+    </div>
+  }
+</section>

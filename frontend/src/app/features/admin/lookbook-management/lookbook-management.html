@@ -1,0 +1,78 @@
+<section class="admin-page">
+  <header class="page-head">
+    <div>
+      <p class="eyebrow">LOOKBOOK</p>
+      <h1>Quản lý bộ sưu tập.</h1>
+      <p>Cập nhật những kiểu tóc mới nhất xuất hiện trên trang chủ.</p>
+    </div>
+    <button class="button" (click)="open()">+ Thêm kiểu tóc</button>
+  </header>
+  @if (error()) {
+    <p class="error">{{ error() }}</p>
+  }
+  @if (notice()) {
+    <p class="notice">{{ notice() }}</p>
+  }
+  <div class="lookbook-grid">
+    @for (item of items(); track item.id) {
+      <article>
+        <div class="preview"><img [src]="item.imageUrl" [alt]="item.title" /></div>
+        <div class="item-copy">
+          <span>#{{ item.sortOrder }}</span>
+          <h2>{{ item.title }}</h2>
+          <small>{{ item.isActive ? 'Đang hiển thị' : 'Đang ẩn' }}</small>
+          <div class="actions">
+            <button (click)="open(item)">Sửa</button><button (click)="remove(item)">Xóa</button>
+          </div>
+        </div>
+      </article>
+    } @empty {
+      <p class="empty">Chưa có kiểu tóc nào. Hãy thêm mục đầu tiên.</p>
+    }
+  </div>
+  @if (editing() !== undefined) {
+    <div class="modal-backdrop" (click)="close()">
+      <form class="modal" (click)="$event.stopPropagation()" (ngSubmit)="save()">
+        <h2>{{ editing() ? 'Chỉnh sửa' : 'Thêm' }} kiểu tóc</h2>
+        <div class="form-grid">
+          <label class="wide"
+            >Tên kiểu tóc<input
+              name="title"
+              [(ngModel)]="form.title"
+              required
+              maxlength="120" /></label
+          ><label
+            >Thứ tự<input
+              name="sortOrder"
+              type="number"
+              min="0"
+              [(ngModel)]="form.sortOrder" /></label
+          ><label class="check"
+            ><input name="active" type="checkbox" [(ngModel)]="form.isActive" /> Hiển thị trên trang
+            chủ</label
+          ><label class="wide"
+            >Ảnh URL<input
+              name="imageUrl"
+              [(ngModel)]="form.imageUrl"
+              placeholder="Hoặc tải ảnh bên dưới" /></label
+          ><label class="wide"
+            >Tải ảnh<input
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              (change)="upload($event)"
+          /></label>
+          @if (uploading()) {
+            <p class="wide upload-note">Đang tải ảnh...</p>
+          }
+          @if (form.imageUrl) {
+            <div class="wide form-preview"><img [src]="form.imageUrl" alt="Xem trước" /></div>
+          }
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="button secondary" (click)="close()">Hủy</button
+          ><button class="button" [disabled]="uploading()">Lưu</button>
+        </div>
+      </form>
+    </div>
+  }
+</section>

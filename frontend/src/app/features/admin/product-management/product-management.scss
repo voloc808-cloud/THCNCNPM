@@ -1,0 +1,35 @@
+@use '../admin-common';
+.head-actions {
+  display: flex;
+  gap: 8px;
+}
+.categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+.categories > span {
+  padding: 7px 9px;
+  color: #bbaa91;
+  border: 1px solid #3d352a;
+  font-size: 10px;
+}
+.categories small {
+  color: #d1a864;
+}
+.categories button {
+  margin-left: 7px;
+  color: #cb8073;
+  border: 0;
+  background: none;
+}
+.actions {
+  display: flex;
+  gap: 6px;
+}
+.actions button {
+  color: #cba96d;
+  border: 1px solid #493d2c;
+  background: transparent;
+}

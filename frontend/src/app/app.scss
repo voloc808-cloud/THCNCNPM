@@ -1,0 +1,95 @@
+:host {
+  display: flex;
+  min-height: 100dvh;
+  flex-direction: column;
+}
+main {
+  flex: 1;
+}
+footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 24px;
+  padding: 38px clamp(20px, 5vw, 72px);
+  border-top: 1px solid #28231c;
+  background: #090909;
+  color: #746d64;
+  font-size: 12px;
+}
+footer p {
+  margin: 8px 0 0;
+}
+.footer-brand {
+  font-family: var(--font-serif);
+  letter-spacing: 0.18em;
+  color: #c99b50;
+}
+@media (max-width: 640px) {
+  footer {
+    align-items: start;
+    flex-direction: column;
+  }
+}
+
+.lamp, .pull-switch { position: fixed; z-index: 140; left: clamp(260px, 82vw, calc(100vw - 95px)); top: 0; pointer-events: none; }
+.lamp-ceiling { width: 50px; height: 5px; margin-left: -25px; background: linear-gradient(90deg, #6f542f, #e0b96d, #6f542f); border-radius: 0 0 5px 5px; }
+.lamp-cable { width: 2px; height: 27px; margin-left: -1px; background: #a77b3d; }
+.lamp-shade { position: relative; width: 74px; height: 30px; margin-left: -37px; border-radius: 48% 48% 8px 8px; background: linear-gradient(100deg, #8f672d, #efcc81 48%, #8a6129); box-shadow: 0 4px 0 #57401f; }
+.lamp-shade::after { content: ''; position: absolute; inset: 20px 4px -4px; border-radius: 50%; background: #43351f; }
+.lamp-bulb { position: absolute; z-index: 1; left: 29px; top: 20px; width: 16px; height: 18px; border-radius: 40% 40% 50% 50%; background: #665438; transition: 0.45s ease; }
+.lamp-glow { position: absolute; left: -190px; top: 45px; width: 380px; height: 270px; opacity: 0; pointer-events: none; background: conic-gradient(from 160deg at 50% 0, transparent 0 39%, rgba(255, 225, 157, 0.2) 43% 57%, transparent 61%); filter: blur(8px); transition: opacity 0.55s ease; }
+.lamp-on .lamp-bulb { background: #fff4bd; box-shadow: 0 0 15px 6px rgba(255, 219, 129, 0.9); }
+.lamp-on .lamp-glow { opacity: 1; }
+.pull-switch { top: 51px; width: 90px; height: calc(116px + var(--pull, 0px)); margin-left: 20px; padding: 0; border: 0; background: transparent; cursor: grab; pointer-events: auto; touch-action: none; color: var(--muted); }
+.pull-switch:active { cursor: grabbing; }
+.switch-chain { position: absolute; left: 8px; top: 0; width: 2px; height: calc(82px + var(--pull, 0px)); background: repeating-linear-gradient(to bottom, #c19b5e 0 3px, #73562f 3px 6px); transition: height 0.22s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.switch-handle { position: absolute; left: 2px; top: calc(78px + var(--pull, 0px)); width: 13px; height: 25px; border: 1px solid #dab56f; background: linear-gradient(90deg, #725329, #d9b16b, #75552c); border-radius: 2px 2px 5px 5px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); transition: top 0.22s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.is-pulling .switch-chain, .is-pulling .switch-handle { transition: none; }
+.switch-hint { position: absolute; top: calc(82px + var(--pull, 0px)); left: 24px; width: 65px; text-align: left; font-size: 8px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0; transition: opacity 0.2s; }
+.pull-switch:hover .switch-hint, .pull-switch:focus-visible .switch-hint { opacity: 1; }
+:host-context(body.light-theme) footer { border-color: #d9c9ad; background: #eee5d7; color: #786b5b; }
+@media (max-width: 640px) { .lamp, .pull-switch { left: calc(100vw - 80px); } .switch-hint { display: none; } }
+/* Compact lamp placement */
+.lamp,
+.pull-switch {
+  left: auto;
+  right: clamp(195px, 13vw, 250px);
+  transform: scale(0.65);
+  transform-origin: top center;
+}
+.pull-switch {
+  margin-left: 13px;
+}
+@media (max-width: 1100px) {
+  .lamp,
+  .pull-switch {
+    right: 160px;
+    transform: scale(0.58);
+  }
+}
+@media (max-width: 820px) {
+  .lamp,
+  .pull-switch {
+    left: auto;
+    right: 76px;
+    transform: scale(0.58);
+  }
+}
+/* Far-right lamp placement */
+.lamp {
+  left: auto;
+  right: 8px;
+}
+.pull-switch {
+  left: auto;
+  right: -45px;
+}
+@media (max-width: 1100px) {
+  .lamp { right: 6px; }
+  .pull-switch { right: -46px; }
+}
+@media (max-width: 820px) {
+  .lamp { left: auto; right: 4px; }
+  .pull-switch { left: auto; right: -48px; }
+}

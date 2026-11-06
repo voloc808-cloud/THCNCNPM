@@ -1,0 +1,16 @@
+<div class="lamp" [class.lamp-on]="lightMode()" aria-hidden="true">
+  <div class="lamp-ceiling"></div><div class="lamp-cable"></div>
+  <div class="lamp-shade"><span class="lamp-bulb"></span></div><div class="lamp-glow"></div>
+</div>
+<button class="pull-switch" type="button" [class.is-pulling]="pullDistance() > 0" [style.--pull.px]="pullDistance()" (pointerdown)="startPull($event)" (pointermove)="movePull($event)" (pointerup)="endPull($event)" (pointercancel)="endPull($event)" [attr.aria-label]="lightMode() ? 'Kéo dây để tắt đèn' : 'Kéo dây để bật đèn'" [attr.aria-pressed]="lightMode()">
+  <span class="switch-chain"></span><span class="switch-handle"></span>
+  <span class="switch-hint">{{ lightMode() ? 'Kéo để tắt' : 'Kéo để bật' }}</span>
+</button><app-header />
+<main><router-outlet /></main>
+<footer>
+  <div>
+    <span class="footer-brand">ROYAL BARBER</span>
+    <p>Nghệ thuật tạo nên phong cách.</p>
+  </div>
+  <p>© 2026 Royal Barber Studio · TP. Hồ Chí Minh</p>
+</footer>

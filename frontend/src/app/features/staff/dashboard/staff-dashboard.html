@@ -1,0 +1,44 @@
+<section class="staff-page">
+  <header class="page-head">
+    <div>
+      <p class="eyebrow">KHÔNG GIAN NHÂN VIÊN</p>
+      <h1>Công việc hôm nay.</h1>
+      <p>Lịch hẹn và các việc cần xử lý trong ca làm việc.</p>
+    </div>
+    <a class="button" routerLink="/staff-portal/lich-hen">Xem toàn bộ lịch</a>
+  </header>
+  @if (error()) {
+    <p class="error">{{ error() }}</p>
+  }
+  <div class="cards">
+    <article class="card">
+      <small>Lịch hôm nay</small><strong>{{ stats().today }}</strong>
+    </article>
+    <article class="card">
+      <small>Chờ xác nhận</small><strong>{{ stats().pending }}</strong>
+    </article>
+    <article class="card">
+      <small>Đã xác nhận</small><strong>{{ stats().confirmed }}</strong>
+    </article>
+  </div>
+  <div class="today panel">
+    <h2>Lịch trong ngày</h2>
+    @if (loading()) {
+      <p class="empty">Đang tải...</p>
+    }
+    @for (item of today(); track item.id) {
+      <article>
+        <time>{{ item.startAt | date: 'HH:mm' }}</time>
+        <div>
+          <strong>{{ item.customer.user.fullName }}</strong>
+          <p>{{ item.services[0]?.serviceName }} · {{ item.totalDurationMinutes }} phút</p>
+        </div>
+        <span class="status {{ item.status }}">{{ item.status }}</span>
+      </article>
+    } @empty {
+      @if (!loading()) {
+        <p class="empty">Hôm nay chưa có lịch hẹn.</p>
+      }
+    }
+  </div>
+</section>

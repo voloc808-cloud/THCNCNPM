@@ -1,0 +1,71 @@
+@use '../admin-common';
+.schedule-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+.schedule-grid > article {
+  padding: 22px;
+  border: 1px solid #302a22;
+  background: #100f0d;
+}
+.schedule-grid h2 {
+  margin: 0 0 18px;
+  font: 24px var(--font-serif);
+}
+.shift-form {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr auto;
+  gap: 8px;
+}
+.shift-form select,
+.shift-form input {
+  min-width: 0;
+  padding: 9px;
+  color: #ddd4c7;
+  border: 1px solid #393229;
+  background: #111;
+}
+.shift-list,
+.dayoff-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 18px;
+}
+.shift-list > div,
+.dayoff-list > div {
+  padding: 13px;
+  border: 1px solid #2e2922;
+  color: #aaa095;
+}
+.shift-list > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.dayoff-list p {
+  margin: 7px 0;
+  color: #aaa095;
+}
+.dayoff-list small {
+  color: #766e64;
+}
+.dayoff-list footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+}
+@media (max-width: 1050px) {
+  .schedule-grid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 600px) {
+  .shift-form {
+    grid-template-columns: 1fr 1fr;
+  }
+  .shift-form select {
+    grid-column: 1/-1;
+  }
+}

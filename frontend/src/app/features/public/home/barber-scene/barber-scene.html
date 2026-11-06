@@ -1,0 +1,11 @@
+<canvas #canvas aria-hidden="true"></canvas>
+@if (!loaded()) {
+  <div class="loader">
+    <span class="loader-mark">RB</span>
+    <div><i [style.width.%]="progress()"></i></div>
+    <p>Đang chuẩn bị trải nghiệm</p>
+  </div>
+}
+@if (failed()) {
+  <div class="fallback" aria-hidden="true"><span>R</span><i></i><span>B</span></div>
+}

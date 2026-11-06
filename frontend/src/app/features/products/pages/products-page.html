@@ -1,0 +1,54 @@
+<section class="shop page-container">
+  <header>
+    <p class="eyebrow">ROYAL GROOMING STORE</p>
+    <h1>Sản phẩm chăm sóc.</h1>
+    <p>Những lựa chọn được đội ngũ Royal Barber sử dụng và tuyển chọn.</p>
+  </header>
+  <div class="filters">
+    <input [(ngModel)]="search" (keyup.enter)="load()" placeholder="Tìm sản phẩm..." /><select
+      [(ngModel)]="categoryId"
+      (change)="load()"
+    >
+      <option value="">Tất cả danh mục</option>
+      @for (c of categories(); track c.id) {
+        <option [value]="c.id">{{ c.name }}</option>
+      }</select
+    ><button (click)="load()">Tìm kiếm</button
+    ><a routerLink="/gio-hang">Giỏ hàng ({{ cart.count() }})</a>
+  </div>
+  @if (notice()) {
+    <p class="notice">{{ notice() }}</p>
+  }
+  <div class="grid">
+    @for (item of items(); track item.id) {
+      <article>
+        <a [routerLink]="['/san-pham', item.slug]" class="visual">
+          @if (item.imageUrl) {
+            <img [src]="item.imageUrl" [alt]="item.name" />
+          } @else {
+            <span>RB</span>
+          }</a
+        ><small>{{ item.category?.name || 'Royal Selection' }}</small>
+        <h2>
+          <a [routerLink]="['/san-pham', item.slug]">{{ item.name }}</a>
+        </h2>
+        <p>{{ item.description }}</p>
+        <footer>
+          <strong>{{ item.price | currency: 'VND' : 'symbol' : '1.0-0' : 'vi-VN' }}</strong
+          ><button [disabled]="item.stock < 1" (click)="add(item)">
+            {{ item.stock > 0 ? 'Thêm giỏ' : 'Hết hàng' }}
+          </button>
+        </footer>
+      </article>
+    } @empty {
+      <p class="empty">{{ loading() ? 'Đang tải...' : 'Không tìm thấy sản phẩm.' }}</p>
+    }
+  </div>
+  @if (meta(); as m) {
+    <div class="pagination">
+      <button [disabled]="m.page <= 1" (click)="load(m.page - 1)">Trước</button
+      ><span>{{ m.page }} / {{ m.totalPages || 1 }}</span
+      ><button [disabled]="m.page >= m.totalPages" (click)="load(m.page + 1)">Sau</button>
+    </div>
+  }
+</section>

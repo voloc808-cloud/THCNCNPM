@@ -1,0 +1,17 @@
+@use '../staff-common';
+.profile-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 0.8fr;
+  gap: 18px;
+}
+.panel .button {
+  margin-top: 18px;
+}
+.password {
+  grid-template-columns: 1fr;
+}
+@media (max-width: 900px) {
+  .profile-grid {
+    grid-template-columns: 1fr;
+  }
+}

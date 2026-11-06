@@ -1,0 +1,30 @@
+<div class="chat-widget">
+  @if (open()) {
+    <section class="chat-panel" aria-label="Khung tin nhắn hỗ trợ" (keydown.escape)="toggle()">
+      <header>
+        <div><strong>Royal Barber</strong><small>Hướng dẫn tự động</small></div>
+        <button type="button" class="close" aria-label="Đóng khung tin nhắn" (click)="toggle()">×</button>
+      </header>
+      <div #messageList class="messages" role="log" aria-live="polite" aria-relevant="additions text">
+        @for (message of messages(); track $index) {
+          <p [class.visitor]="message.from === 'visitor'">{{ message.text }}</p>
+        }
+      </div>
+      <nav aria-label="Liên kết hỗ trợ">
+        <a routerLink="/dich-vu">Dịch vụ</a>
+        <a routerLink="/doi-ngu">Đội ngũ</a>
+        <a routerLink="/customer/dat-lich">Đặt lịch</a>
+      </nav>
+      <form (ngSubmit)="send()">
+        <label class="sr-only" for="chat-message">Nội dung tin nhắn</label>
+        <input id="chat-message" name="message" [(ngModel)]="draft" maxlength="500" placeholder="Nhập câu hỏi của bạn..." autocomplete="off" />
+        <button type="submit" [disabled]="!draft.trim()" aria-label="Gửi câu hỏi">➤</button>
+      </form>
+      <small class="chat-note">Phản hồi tự động; tin nhắn không được gửi đến nhân viên.</small>
+    </section>
+  }
+  <button class="chat-robot" type="button" [attr.aria-expanded]="open()" [attr.aria-label]="open() ? 'Đóng chat hỗ trợ' : 'Mở chat hỗ trợ Royal Barber'" (click)="toggle()">
+    <img src="/assets/images/chat-robot.png" alt="" />
+    <span class="chat-label">{{ open() ? 'Đóng chat' : 'Chat với Royal' }}</span>
+  </button>
+</div>

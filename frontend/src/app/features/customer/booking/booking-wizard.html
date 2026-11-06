@@ -1,0 +1,195 @@
+<section class="booking">
+  <header>
+    <p class="eyebrow">Đặt lịch trực tuyến</p>
+    <h1>Chọn trải nghiệm.</h1>
+    <div class="steps">
+      @for (
+        label of ['Dịch vụ', 'Người thợ', 'Thời gian', 'Xác nhận'];
+        track label;
+        let index = $index
+      ) {
+        <span [class.active]="step() === index + 1" [class.done]="step() > index + 1"
+          ><i>{{ step() > index + 1 ? '✓' : index + 1 }}</i
+          >{{ label }}</span
+        >
+      }
+    </div>
+  </header>
+  @if (error()) {
+    <div class="alert">{{ error() }}</div>
+  }
+  @if (created()) {
+    <div class="success">
+      <span>✓</span>
+      <p class="eyebrow">Đặt lịch thành công</p>
+      <h2>{{ created()!.code }}</h2>
+      <p>
+        Chúng tôi đã ghi nhận lịch hẹn lúc
+        <strong>{{ created()!.startAt | date: 'HH:mm · dd/MM/yyyy' }}</strong> với
+        {{ created()!.staff.user.fullName }}.
+      </p>
+      <div>
+        <a class="button" routerLink="/customer/lich-hen">Xem lịch hẹn</a
+        ><a class="button button-outline" routerLink="/">Về trang chủ</a>
+      </div>
+    </div>
+  } @else if (loading()) {
+    <div class="loading">
+      <i></i>
+      <p>Đang tải dịch vụ...</p>
+    </div>
+  } @else {
+    <div class="wizard-body">
+      @if (step() === 1) {
+        <div class="choice-grid services">
+          @for (service of services(); track service.id) {
+            <button
+              type="button"
+              (click)="toggleService(service.id)"
+              [class.selected]="selectedServiceIds().includes(service.id)"
+            >
+              <span class="check">{{ selectedServiceIds().includes(service.id) ? '✓' : '+' }}</span
+              ><small>{{ service.durationMinutes }} phút</small>
+              <h2>{{ service.name }}</h2>
+              <p>{{ service.description }}</p>
+              <strong>{{ service.price | currency: 'VND' : 'symbol' : '1.0-0' : 'vi-VN' }}</strong>
+            </button>
+          }
+        </div>
+      }
+      @if (step() === 2) {
+        <div class="choice-grid staff">
+          <button
+            class="any-staff"
+            type="button"
+            (click)="chooseStaff(null)"
+            [class.selected]="selectedStaffId() === null"
+          >
+            <span class="avatar">✦</span><small>Gợi ý tốt nhất</small>
+            <h2>Bất kỳ thợ nào</h2>
+            <p>Hệ thống tự chọn người thợ phù hợp đang còn trống.</p>
+          </button>
+          @for (member of staff(); track member.id) {
+            <button
+              type="button"
+              (click)="chooseStaff(member.id)"
+              [class.selected]="selectedStaffId() === member.id"
+            >
+              <span class="avatar">{{ member.user.fullName.charAt(0) }}</span
+              ><small>★ {{ member.averageRating }} · {{ member.yearsOfExperience }} năm</small>
+              <h2>{{ member.user.fullName }}</h2>
+              <p>{{ member.specialties || 'Barber chuyên nghiệp' }}</p>
+            </button>
+          }
+        </div>
+      }
+      @if (step() === 3) {
+        <div class="schedule">
+          <div class="date-picker">
+            <label for="bookingDate">Chọn ngày</label
+            ><input
+              id="bookingDate"
+              type="date"
+              [min]="minDate"
+              [max]="maxDate"
+              [ngModel]="selectedDate()"
+              (ngModelChange)="setDate($event)"
+            />
+            <p>Cho phép đặt lịch trước tối đa 30 ngày.</p>
+          </div>
+          <div class="slots">
+            <h2>Khung giờ còn trống</h2>
+            @if (loadingSlots()) {
+              <div class="loading compact">
+                <i></i>
+                <p>Đang kiểm tra lịch...</p>
+              </div>
+            } @else if (!selectedDate()) {
+              <p class="empty">Vui lòng chọn ngày để xem giờ trống.</p>
+            } @else if (!availability()?.slots?.length) {
+              <p class="empty">Ngày này chưa còn khung giờ phù hợp. Hãy thử ngày khác.</p>
+            } @else {
+              <div class="slot-grid">
+                @for (slot of availability()!.slots; track slot.startAt) {
+                  <button
+                    type="button"
+                    (click)="selectSlot(slot)"
+                    [class.selected]="selectedSlot()?.startAt === slot.startAt"
+                  >
+                    <strong>{{ slot.startAt | date: 'HH:mm' }}</strong
+                    ><small>{{ slot.availableStaffIds.length }} thợ trống</small>
+                  </button>
+                }
+              </div>
+            }
+          </div>
+        </div>
+      }
+      @if (step() === 4) {
+        <div class="confirmation">
+          <div>
+            <p class="eyebrow">Tóm tắt lịch hẹn</p>
+            <h2>{{ selectedSlot()!.startAt | date: 'EEEE, dd/MM/yyyy · HH:mm' : '' : 'vi-VN' }}</h2>
+            <dl>
+              <div>
+                <dt>Dịch vụ</dt>
+                <dd>
+                  @for (service of selectedServices(); track service.id) {
+                    <span>{{ service.name }}</span>
+                  }
+                </dd>
+              </div>
+              <div>
+                <dt>Người thợ</dt>
+                <dd>{{ selectedStaff()?.user?.fullName || 'Tự động chọn thợ còn trống' }}</dd>
+              </div>
+              <div>
+                <dt>Thời lượng</dt>
+                <dd>{{ totalDuration() }} phút</dd>
+              </div>
+              <div class="total">
+                <dt>Tổng dự kiến</dt>
+                <dd>{{ totalPrice() | currency: 'VND' : 'symbol' : '1.0-0' : 'vi-VN' }}</dd>
+              </div>
+            </dl>
+          </div>
+          <div class="note">
+            <label for="note">Ghi chú cho người thợ</label
+            ><textarea
+              id="note"
+              [(ngModel)]="note"
+              maxlength="1000"
+              placeholder="Kiểu tóc mong muốn, lưu ý đặc biệt..."
+            ></textarea>
+            <p>Lịch được tạo ở trạng thái chờ xác nhận. Email xác nhận sẽ được gửi đến bạn.</p>
+          </div>
+        </div>
+      }
+    </div>
+    <footer class="wizard-footer">
+      <button type="button" class="back" (click)="back()" [disabled]="step() === 1">
+        ← Quay lại
+      </button>
+      <div class="summary">
+        <span>{{ selectedServiceIds().length }} dịch vụ · {{ totalDuration() }} phút</span
+        ><strong>{{ totalPrice() | currency: 'VND' : 'symbol' : '1.0-0' : 'vi-VN' }}</strong>
+      </div>
+      @if (step() < 4) {
+        <button
+          type="button"
+          class="button"
+          (click)="next()"
+          [disabled]="
+            (step() === 1 && !selectedServiceIds().length) || (step() === 3 && !selectedSlot())
+          "
+        >
+          Tiếp tục →
+        </button>
+      } @else {
+        <button type="button" class="button" (click)="confirm()" [disabled]="submitting()">
+          {{ submitting() ? 'Đang đặt lịch...' : 'Xác nhận đặt lịch' }}
+        </button>
+      }
+    </footer>
+  }
+</section>

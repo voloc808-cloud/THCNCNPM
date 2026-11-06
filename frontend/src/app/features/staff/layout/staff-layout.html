@@ -1,0 +1,34 @@
+<div class="staff-shell">
+  <aside>
+    <div class="person">
+      <span class="person-avatar">
+        @if (auth.user()?.avatarUrl) {
+          <img [src]="auth.user()?.avatarUrl" alt="Ảnh đại diện nhân viên" />
+        } @else {
+          {{ auth.user()?.fullName?.charAt(0) || 'R' }}
+        }
+      </span>
+      <div>
+        <strong>{{ auth.user()?.fullName }}</strong
+        ><small>Royal Barber · Staff</small>
+      </div>
+    </div>
+    <nav>
+      <a
+        routerLink="/staff-portal"
+        [routerLinkActiveOptions]="{ exact: true }"
+        routerLinkActive="active"
+        >⌂ <span>Hôm nay</span></a
+      ><a routerLink="/staff-portal/lich-hen" routerLinkActive="active">◷ <span>Lịch hẹn</span></a
+      ><a routerLink="/staff-portal/danh-gia" routerLinkActive="active">★ <span>Đánh giá</span></a
+      ><a routerLink="/staff-portal/lich-lam-viec" routerLinkActive="active"
+        >▦ <span>Lịch làm việc</span>@if (dayOffNotifications.unreadCount()) { <span class="nav-badge" [attr.aria-label]="dayOffNotifications.unreadCount() + ' thông báo ngày nghỉ chưa đọc'">{{ dayOffNotifications.unreadCount() }}</span> }</a
+      ><a routerLink="/staff-portal/ho-so" routerLinkActive="active">◇ <span>Hồ sơ</span></a>
+    </nav>
+    <div class="note">
+      <small>ROYAL STANDARD</small>
+      <p>Chỉn chu trong từng trải nghiệm.</p>
+    </div>
+  </aside>
+  <main><router-outlet /></main>
+</div>

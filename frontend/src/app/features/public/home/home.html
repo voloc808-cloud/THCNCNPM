@@ -1,0 +1,242 @@
+<div class="home-story">
+  <app-barber-scene />
+  <section class="hero chapter">
+    <div class="hero-copy reveal">
+      <p class="eyebrow hero-intro hero-intro-1">Royal Barber Studio · Since 2018</p>
+      <h1><span class="hero-title-line hero-intro hero-intro-2">Định hình</span><span class="hero-title-line hero-intro hero-intro-3"><em>khí chất</em> riêng.</span></h1>
+      <p class="lead hero-intro hero-intro-4">
+        Không chỉ là một kiểu tóc. Đó là nghi thức dành cho người đàn ông biết mình muốn gì.
+      </p>
+      <div class="hero-actions hero-intro hero-intro-5">
+        <a class="button" routerLink="/customer/dat-lich">Đặt lịch ngay</a>
+        <a class="ghost-link" href="#services">Khám phá <span>↓</span></a>
+      </div>
+    </div>
+
+    <div class="hero-video-col">
+      <div class="hero-video-frame">
+        <video
+          class="hero-video"
+          autoplay
+          loop
+          muted
+          playsinline
+          preload="none"
+          poster=""
+          aria-hidden="true"
+        >
+          <source src="assets/videos/barber-broll.mp4" type="video/mp4" />
+          <source src="assets/videos/barber-broll.webm" type="video/webm" />
+        </video>
+        <div class="hero-video-vignette"></div>
+      </div>
+    </div>
+
+    <div class="chapter-index">01 <i></i> The entrance</div>
+    <div class="scroll-cue"><span></span>Cuộn để bắt đầu</div>
+  </section>
+  <section class="about chapter">
+    <div class="about-video-col">
+      <div class="about-video-frame">
+        <video
+          class="about-video"
+          autoplay
+          loop
+          muted
+          playsinline
+          preload="none"
+          aria-hidden="true"
+        >
+          <source src="assets/videos/barber-portrait.mp4" type="video/mp4" />
+          <source src="assets/videos/barber-portrait.webm" type="video/webm" />
+        </video>
+        <div class="about-video-vignette"></div>
+      </div>
+    </div>
+    <div class="section-card story-copy" data-parallax #storyCopy>
+      <p class="eyebrow" data-story-reveal>Câu chuyện của chúng tôi</p>
+      <h2 data-story-reveal>Nghề thủ công.<br /><i>Tinh thần hiện đại.</i></h2>
+      <p data-story-reveal>
+        Royal Barber ra đời từ niềm tin rằng một lần cắt tóc phải là khoảng thời gian dành riêng cho
+        chính mình. Chúng tôi kết hợp kỹ thuật barber cổ điển với thẩm mỹ đương đại, tạo ra diện mạo
+        không chạy theo xu hướng — mà thuộc về bạn.
+      </p>
+      <div class="numbers" #numbers>
+        <span data-story-reveal><strong data-count="8" data-suffix="+">8+</strong>Năm kiến tạo</span
+        ><span data-story-reveal><strong data-count="12" data-suffix="K">12K</strong>Khách hàng</span
+        ><span data-story-reveal><strong data-count="4.9" data-decimals="1">4.9</strong>Điểm trải nghiệm</span>
+      </div>
+    </div>
+    <div class="chapter-index">02 <i></i> Our craft</div>
+  </section>
+  <section class="services chapter" id="services">
+    <div class="section-heading services-heading" #servicesHeading>
+      <p class="eyebrow" data-service-reveal>Dịch vụ nổi bật</p>
+      <h2>
+        <span class="service-title-line" data-service-reveal>Nghi thức của</span>
+        <span class="service-title-line" data-service-reveal>người đàn ông.</span>
+      </h2>
+    </div>
+    <div class="service-grid">
+      @for (service of services(); track service.no) {
+        <article class="service-card reveal" [class.has-image]="service.imageUrl">
+          @if (service.imageUrl) {
+            <img
+              class="service-image"
+              [src]="service.imageUrl"
+              [alt]="service.name"
+              loading="lazy"
+            />
+          }
+          <span class="no">{{ service.no }}</span>
+          <div class="service-icon" aria-hidden="true">✦</div>
+          <h3>{{ service.name }}</h3>
+          <p>{{ service.description }}</p>
+          <footer>
+            <span>{{ service.time }}</span
+            ><strong>{{ service.price | currency: 'VND' : 'symbol' : '1.0-0' : 'vi-VN' }}</strong>
+          </footer>
+        </article>
+      }
+    </div>
+    <a class="view-all" routerLink="/dich-vu">Xem toàn bộ dịch vụ <span>→</span></a>
+    <div class="chapter-index">03 <i></i> Services</div>
+  </section>
+  <section class="team chapter">
+    <div class="section-heading team-heading" #teamHeading>
+      <p class="eyebrow" data-team-reveal>Đội ngũ nghệ nhân</p>
+      <h2>
+        <span class="animated-title-line" data-team-reveal>Đôi tay tạo nên</span>
+        <span class="animated-title-line" data-team-reveal><i>khác biệt.</i></span>
+      </h2>
+    </div>
+    <div class="team-grid">
+      @for (member of team(); track member.id) {
+        <article class="team-card reveal">
+          <div class="portrait" [class.has-image]="member.imageUrl">
+            @if (member.imageUrl) {
+              <img [src]="member.imageUrl" [alt]="member.name" />
+            } @else {
+              <span>{{ member.initial }}</span>
+            }
+            <i></i>
+          </div>
+          <p>{{ member.role }}</p>
+          <h3>{{ member.name }}</h3>
+          <small>{{ member.skill }}</small>
+        </article>
+      }
+    </div>
+    <div class="chapter-index">04 <i></i> The artists</div>
+  </section>
+  <section class="gallery chapter">
+    <div class="gallery-title collection-heading" #collectionHeading>
+      <p class="eyebrow" data-collection-reveal>Bộ sưu tập</p>
+      <h2>
+        <span class="animated-title-line" data-collection-reveal>Signature</span>
+        <span class="animated-title-line" data-collection-reveal><i>looks.</i></span>
+      </h2>
+      <p data-collection-reveal>Mỗi đường cắt là một tuyên ngôn thầm lặng.</p>
+    </div>
+    <div class="gallery-grid">
+      @for (look of looks(); track look.id; let index = $index) {
+        <figure
+          class="look reveal"
+          [class.has-image]="look.imageUrl"
+          [attr.data-parallax]="index === 1 ? '' : null"
+        >
+          @if (look.imageUrl) {
+            <img [src]="look.imageUrl" [alt]="look.title" />
+          }
+          <div>
+            <span>0{{ index + 1 }}</span
+            ><b>{{ look.title }}</b>
+          </div>
+        </figure>
+      }
+    </div>
+    <div class="chapter-index">05 <i></i> Lookbook</div>
+  </section>
+  <section class="testimonial chapter">
+    <div class="quote-mark">“</div>
+    <blockquote #quote aria-label="Một trong số ít nơi tôi có thể ngồi xuống, không cần nói quá nhiều, và biết mình sẽ bước ra với phiên bản tốt hơn.">
+      @for (line of quoteLines; track $index) {
+        <span class="quote-line" aria-hidden="true">
+          @for (character of line; track $index) {
+            <span class="quote-char">{{ character }}</span>
+          }
+        </span>
+      }
+    </blockquote>
+    <div class="reviewer">
+      <span>NM</span>
+      <p><strong>Nguyễn Minh</strong><small>Khách hàng từ 2019 · ★★★★★</small></p>
+    </div>
+    <div class="chapter-index">06 <i></i> Words</div>
+  </section>
+  <section class="pricing chapter">
+    <div class="pricing-head pricing-heading" #pricingHeading>
+      <p class="eyebrow" data-pricing-reveal>Bảng giá</p>
+      <h2>
+        <span class="animated-title-line" data-pricing-reveal>Minh bạch.</span>
+        <span class="animated-title-line" data-pricing-reveal><i>Xứng đáng.</i></span>
+      </h2>
+      <p data-pricing-reveal>Mức giá đã bao gồm tư vấn kiểu tóc và hoàn thiện tạo kiểu.</p>
+    </div>
+    <div class="price-list reveal">
+      @for (item of services(); track item.no) {
+        <div>
+          <span
+            >{{ item.name }}<small>{{ item.time }}</small></span
+          ><i></i><strong>{{ item.price | currency: 'VND' : 'symbol' : '1.0-0' : 'vi-VN' }}</strong>
+        </div>
+      }
+      <a class="button button-outline" routerLink="/customer/dat-lich">Chọn dịch vụ & đặt lịch</a>
+    </div>
+    <div class="chapter-index">07 <i></i> Pricing</div>
+  </section>
+  <section class="contact chapter">
+    <div class="contact-copy contact-heading" #contactHeading>
+      <p class="eyebrow" data-contact-reveal>Ghé thăm chúng tôi</p>
+      <h2>
+        <span class="animated-title-line" data-contact-reveal>Một góc riêng</span>
+        <span class="animated-title-line" data-contact-reveal>giữa thành phố.</span>
+      </h2>
+      <div class="contact-info" data-contact-reveal>
+        <p><small>Địa chỉ</small>123 Nguyễn Huệ, Quận 1<br />TP. Hồ Chí Minh</p>
+        <p><small>Giờ mở cửa</small>Thứ 2 – Thứ 7: 09:00 – 19:00<br />Chủ nhật: Nghỉ</p>
+        <p><small>Liên hệ</small>090 000 0000<br />hello@royalbarber.vn</p>
+      </div>
+    </div>
+    <div class="map reveal">
+      <iframe
+        title="Vị trí Royal Barber tại 123 Nguyễn Huệ, Quận 1"
+        src="https://www.google.com/maps?q=123%20Nguy%E1%BB%85n%20Hu%E1%BB%87%2C%20Qu%E1%BA%ADn%201%2C%20TP.%20H%E1%BB%93%20Ch%C3%AD%20Minh&z=16&output=embed"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        allowfullscreen
+      ></iframe
+      ><a
+        class="map-link"
+        href="https://www.google.com/maps/search/?api=1&query=123%20Nguy%E1%BB%85n%20Hu%E1%BB%87%2C%20Qu%E1%BA%ADn%201%2C%20TP.%20H%E1%BB%93%20Ch%C3%AD%20Minh"
+        target="_blank"
+        rel="noopener noreferrer"
+        >Mở trên Google Maps <span>↗</span></a
+      >
+    </div>
+    <div class="chapter-index">08 <i></i> Find us</div>
+  </section>
+  <section class="final-cta chapter" #finalCta>
+    <div class="cta-ring" aria-hidden="true"></div>
+    <div class="final-cta-copy">
+      <p class="eyebrow" data-final-reveal>Sẵn sàng cho diện mạo mới?</p>
+      <h2>
+        <span class="animated-title-line" data-final-reveal>Đến lượt</span>
+        <span class="animated-title-line" data-final-reveal><i>của bạn.</i></span>
+      </h2>
+      <p data-final-reveal>Chọn dịch vụ, người thợ và khung giờ phù hợp — chỉ trong vài bước.</p>
+      <a class="button" data-final-reveal routerLink="/customer/dat-lich">Đặt lịch ngay <span>→</span></a>
+    </div>
+  </section>
+</div>
+<app-chat-widget />

@@ -1,0 +1,13 @@
+@use '../staff-common';
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.actions button {
+  padding: 7px 9px;
+  color: #caa86c;
+  border: 1px solid #493c2b;
+  background: transparent;
+  cursor: pointer;
+}

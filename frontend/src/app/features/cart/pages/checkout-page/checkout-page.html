@@ -1,0 +1,55 @@
+<section class="checkout page-container">
+  <header>
+    <p>THANH TOÁN</p>
+    <h1>Thông tin nhận hàng.</h1>
+  </header>
+  @if (error()) {
+    <p class="error">{{ error() }}</p>
+  }
+  @if (cart.items().length) {
+    <form (ngSubmit)="submit()">
+      <div class="fields">
+        <label
+          >Người nhận<input name="name" [(ngModel)]="recipientName" required minlength="2" /></label
+        ><label>Số điện thoại<input name="phone" [(ngModel)]="recipientPhone" required /></label
+        ><label class="wide"
+          >Địa chỉ giao hàng<textarea
+            name="address"
+            [(ngModel)]="shippingAddress"
+            required
+            minlength="10"
+          ></textarea></label
+        ><label class="wide"
+          >Ghi chú<textarea name="note" [(ngModel)]="customerNote"></textarea>
+        </label>
+      </div>
+      <aside>
+        <h2>Đơn hàng</h2>
+        @for (item of cart.items(); track item.product.id) {
+          <p>
+            <span>{{ item.product.name }} × {{ item.quantity }}</span
+            ><strong>{{
+              +item.product.price * item.quantity | currency: 'VND' : 'symbol' : '1.0-0' : 'vi-VN'
+            }}</strong>
+          </p>
+        }
+        <hr />
+        <p>
+          <span>Tạm tính</span
+          ><strong>{{ cart.subtotal() | currency: 'VND' : 'symbol' : '1.0-0' : 'vi-VN' }}</strong>
+        </p>
+        <p>
+          <span>Giao hàng dự kiến</span
+          ><strong>{{
+            (cart.subtotal() >= 500000 ? 0 : 30000) | currency: 'VND' : 'symbol' : '1.0-0' : 'vi-VN'
+          }}</strong>
+        </p>
+        <button [disabled]="saving()">
+          {{ saving() ? 'Đang đặt hàng...' : 'Xác nhận đặt hàng' }}
+        </button>
+      </aside>
+    </form>
+  } @else {
+    <p>Giỏ hàng trống. <a routerLink="/san-pham">Quay lại sản phẩm</a></p>
+  }
+</section>

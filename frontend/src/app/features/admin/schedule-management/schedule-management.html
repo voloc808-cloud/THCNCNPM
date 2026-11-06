@@ -1,0 +1,81 @@
+<section class="admin-page">
+  <header class="page-head">
+    <div>
+      <p class="eyebrow">NHÂN SỰ</p>
+      <h1>Lịch làm việc.</h1>
+      <p>Thiết lập ca định kỳ và duyệt yêu cầu nghỉ.</p>
+    </div>
+  </header>
+  @if (error()) {
+    <p class="error">{{ error() }}</p>
+  }
+  @if (notice()) {
+    <p class="notice">{{ notice() }}</p>
+  }
+  <div class="schedule-grid">
+    <article>
+      <h2>Ca làm việc</h2>
+      <div class="toolbar">
+        <select [(ngModel)]="selectedStaff" (change)="loadShifts()">
+          @for (item of staff(); track item.id) {
+            <option [value]="item.id">{{ item.user.fullName }}</option>
+          }
+        </select>
+      </div>
+      <div class="shift-form">
+        <select [(ngModel)]="dayOfWeek">
+          @for (day of days; track $index) {
+            <option [ngValue]="$index">{{ day }}</option>
+          }</select
+        ><input type="time" [(ngModel)]="startTime" /><input
+          type="time"
+          [(ngModel)]="endTime"
+        /><button class="button" (click)="addShift()" [disabled]="!selectedStaff">Thêm ca</button>
+      </div>
+      <div class="shift-list">
+        @for (shift of shifts(); track shift.id) {
+          <div>
+            <span
+              ><strong>{{ days[shift.dayOfWeek] }}</strong> {{ time(shift.startTime) }} –
+              {{ time(shift.endTime) }}</span
+            ><span class="actions"
+              ><button (click)="toggle(shift)">{{ shift.isActive ? 'Tắt' : 'Bật' }}</button
+              ><button (click)="remove(shift)">Xóa</button></span
+            >
+          </div>
+        } @empty {
+          <p class="empty">Chưa có ca làm việc.</p>
+        }
+      </div>
+    </article>
+    <article>
+      <h2>Yêu cầu nghỉ</h2>
+      <div class="dayoff-list">
+        @for (item of daysOff(); track item.id) {
+          <div>
+            <strong>{{ item.staff.user.fullName }}</strong>
+            <p>
+              {{ item.startAt | date: 'dd/MM/yyyy HH:mm' }} –
+              {{ item.endAt | date: 'dd/MM/yyyy HH:mm' }}
+            </p>
+            <small>{{ item.reason || 'Không có lý do' }}</small>
+            <footer>
+              <span class="status {{ item.status }}">{{ item.status === 'PENDING' ? 'Đang chờ duyệt' : item.status === 'APPROVED' ? 'Đã duyệt' : 'Đã từ chối' }}</span>
+              @if (notifications.isDayOffUnread(item)) {
+                <button type="button" (click)="notifications.markDayOffRead(item)">Đã đọc</button>
+              }
+              @if (item.status === 'PENDING') {
+                <span class="actions"
+                  ><button (click)="review(item, 'APPROVED')">Duyệt</button
+                  ><button (click)="review(item, 'REJECTED')">Từ chối</button></span
+                >
+              }
+            </footer>
+          </div>
+        } @empty {
+          <p class="empty">Chưa có yêu cầu nghỉ.</p>
+        }
+      </div>
+    </article>
+  </div>
+</section>

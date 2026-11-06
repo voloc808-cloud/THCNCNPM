@@ -1,0 +1,96 @@
+<section class="staff-page">
+  <header class="page-head">
+    <div>
+      <p class="eyebrow">LỊCH CÁ NHÂN</p>
+      <h1>Lịch hẹn của tôi.</h1>
+      <p>Xác nhận và cập nhật kết quả phục vụ khách hàng.</p>
+    </div>
+  </header>
+  <div class="toolbar">
+    <select [(ngModel)]="filter" (change)="load()">
+      <option value="">Tất cả trạng thái</option>
+      @for (s of statuses; track s) {
+        <option [value]="s">{{ label(s) }}</option>
+      }</select
+    ><input type="date" [(ngModel)]="dateFrom" /><input type="date" [(ngModel)]="dateTo" /><button
+      class="button secondary"
+      (click)="load()"
+    >
+      Lọc lịch
+    </button>
+  </div>
+  @if (error()) {
+    <p class="error">{{ error() }}</p>
+  }
+  @if (notice()) {
+    <p class="notice">{{ notice() }}</p>
+  }
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Thời gian</th>
+          <th>Khách hàng</th>
+          <th>Dịch vụ</th>
+          <th>Thời lượng</th>
+          <th>Tổng tiền</th>
+          <th>Trạng thái</th>
+          <th>Cập nhật</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of items(); track item.id) {
+          <tr>
+            <td>
+              <strong>{{ item.startAt | date: 'dd/MM/yyyy HH:mm' }}</strong
+              ><br /><small>{{ item.code }}</small>
+            </td>
+            <td>
+              {{ item.customer.user.fullName }}<br /><small>{{
+                item.customer.user.phone || item.customer.user.email
+              }}</small>
+            </td>
+            <td>
+              @for (line of item.services; track line.serviceId) {
+                <div>{{ line.serviceName }}</div>
+              }
+            </td>
+            <td>{{ item.totalDurationMinutes }} phút</td>
+            <td>{{ item.totalPrice | currency: 'VND' : 'symbol' : '1.0-0' : 'vi-VN' }}</td>
+            <td>
+              <span class="status {{ item.status }}">{{ label(item.status) }}</span>
+            </td>
+            <td class="actions">
+              @for (next of allowed(item); track next) {
+                <button [disabled]="actionId() === item.id" (click)="update(item, next)">
+                  {{ label(next) }}
+                </button>
+              }
+              @if (!allowed(item).length) {
+                <small>Đã kết thúc</small>
+              }
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="7">{{ loading() ? 'Đang tải...' : 'Không có lịch phù hợp.' }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  @if (meta(); as m) {
+    <div class="pagination">
+      <button class="button secondary" [disabled]="m.page <= 1" (click)="load(m.page - 1)">
+        Trước</button
+      ><span>Trang {{ m.page }} / {{ m.totalPages || 1 }}</span
+      ><button
+        class="button secondary"
+        [disabled]="m.page >= m.totalPages"
+        (click)="load(m.page + 1)"
+      >
+        Sau
+      </button>
+    </div>
+  }
+</section>

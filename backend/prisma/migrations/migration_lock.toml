@@ -1,0 +1,2 @@
+# Không sửa thủ công provider sau khi migration đã được áp dụng.
+provider = "mysql"

@@ -1,0 +1,151 @@
+<section class="history">
+  <header>
+    <div>
+      <p class="eyebrow">Lịch của tôi</p>
+      <h1>Lịch hẹn</h1>
+    </div>
+    <div class="filters">
+      @for (status of statuses; track status.value) {
+        <button
+          type="button"
+          (click)="setFilter(status.value)"
+          [class.active]="filter() === status.value"
+        >
+          {{ status.label }}
+        </button>
+      }
+    </div>
+  </header>
+  @if (error()) {
+    <div class="alert">{{ error() }}</div>
+  }
+  @if (notice()) {
+    <div class="notice">✓ {{ notice() }}</div>
+  }
+  @if (loading()) {
+    <div class="loading">Đang tải lịch hẹn...</div>
+  } @else if (!items().length) {
+    <div class="empty">
+      <span>◷</span>
+      <h2>Chưa có lịch hẹn</h2>
+      <p>Các lịch đã đặt sẽ xuất hiện tại đây.</p>
+    </div>
+  } @else {
+    <div class="appointment-list">
+      @for (item of items(); track item.id) {
+        <article>
+          <div class="date-block">
+            <strong>{{ item.startAt | date: 'dd' }}</strong
+            ><span>{{ item.startAt | date: 'MMM · yyyy' : '' : 'vi-VN' }}</span
+            ><b>{{ item.startAt | date: 'HH:mm' }}</b>
+          </div>
+          <div class="details">
+            <div class="top">
+              <span class="status" [attr.data-status]="item.status">{{
+                statusLabel(item.status)
+              }}</span
+              ><small>{{ item.code }}</small>
+            </div>
+            <h2>
+              {{ item.services[0].serviceName }}
+              @if (item.services.length > 1) {
+                <i>+{{ item.services.length - 1 }}</i>
+              }
+            </h2>
+            <p>
+              Thợ: <strong>{{ item.staff.user.fullName }}</strong> ·
+              {{ item.totalDurationMinutes }} phút
+            </p>
+            <div class="services">
+              @for (service of item.services; track service.serviceId) {
+                <span>{{ service.serviceName }}</span>
+              }
+            </div>
+          </div>
+          <div class="appointment-actions">
+            <strong>{{ item.totalPrice | currency: 'VND' : 'symbol' : '1.0-0' : 'vi-VN' }}</strong>
+            @if (canCancel(item)) {
+              <button type="button" class="danger" (click)="openCancel(item)">Hủy lịch</button>
+            }
+            @if (item.status === 'COMPLETED' && !item.review) {
+              <button type="button" class="gold" (click)="openReview(item)">Đánh giá</button>
+            }
+            @if (item.review) {
+              <small class="reviewed">★ {{ item.review.rating }} · Đã đánh giá</small>
+            }
+          </div>
+        </article>
+      }
+    </div>
+    @if ((meta()?.totalPages ?? 0) > 1) {
+      <div class="pagination">
+        <button [disabled]="meta()!.page === 1" (click)="load(meta()!.page - 1)">←</button
+        ><span>Trang {{ meta()!.page }} / {{ meta()!.totalPages }}</span
+        ><button [disabled]="meta()!.page === meta()!.totalPages" (click)="load(meta()!.page + 1)">
+          →
+        </button>
+      </div>
+    }
+  }
+  @if (cancelTarget()) {
+    <div class="modal-backdrop" (click)="cancelTarget.set(null)">
+      <div class="modal" (click)="$event.stopPropagation()">
+        <p class="eyebrow">Hủy lịch {{ cancelTarget()!.code }}</p>
+        <h2>Bạn chắc chắn muốn hủy?</h2>
+        <p>
+          Lịch lúc {{ cancelTarget()!.startAt | date: 'HH:mm · dd/MM/yyyy' }}. Thao tác này không
+          thể hoàn tác.
+        </p>
+        <label for="cancelReason">Lý do hủy</label
+        ><textarea
+          id="cancelReason"
+          [(ngModel)]="cancelReason"
+          maxlength="500"
+          placeholder="Vui lòng nhập ít nhất 3 ký tự"
+        ></textarea>
+        <footer>
+          <button type="button" (click)="cancelTarget.set(null)">Giữ lịch</button
+          ><button
+            type="button"
+            class="danger-fill"
+            [disabled]="cancelReason.trim().length < 3 || actionLoading()"
+            (click)="confirmCancel()"
+          >
+            {{ actionLoading() ? 'Đang xử lý...' : 'Xác nhận hủy' }}
+          </button>
+        </footer>
+      </div>
+    </div>
+  }
+  @if (reviewTarget()) {
+    <div class="modal-backdrop" (click)="reviewTarget.set(null)">
+      <div class="modal review-modal" (click)="$event.stopPropagation()">
+        <p class="eyebrow">Chia sẻ trải nghiệm</p>
+        <h2>Bạn hài lòng thế nào?</h2>
+        <div class="stars">
+          @for (star of [1, 2, 3, 4, 5]; track star) {
+            <button type="button" (click)="rating = star" [class.active]="star <= rating">★</button>
+          }
+        </div>
+        <label for="reviewComment">Nhận xét</label
+        ><textarea
+          id="reviewComment"
+          [(ngModel)]="reviewComment"
+          maxlength="2000"
+          placeholder="Điều gì khiến bạn ấn tượng?"
+        ></textarea>
+        <footer>
+          <button type="button" (click)="reviewTarget.set(null)">Để sau</button
+          ><button
+            type="button"
+            class="button"
+            [disabled]="actionLoading()"
+            (click)="submitReview()"
+          >
+            Gửi đánh giá
+          </button>
+        </footer>
+      </div>
+    </div>
+  }
+</section>

@@ -1,0 +1,24 @@
+<section class="detail page-container">
+  @if (item(); as p) {
+    <div class="visual">
+      @if (p.imageUrl) {
+        <img [src]="p.imageUrl" [alt]="p.name" />
+      } @else {
+        <span>RB</span>
+      }
+    </div>
+    <div class="copy">
+      <p class="eyebrow">{{ p.category?.name || 'ROYAL SELECTION' }}</p>
+      <h1>{{ p.name }}</h1>
+      <strong>{{ p.price | currency: 'VND' : 'symbol' : '1.0-0' : 'vi-VN' }}</strong>
+      <p class="description">{{ p.description }}</p>
+      <p class="stock">{{ p.stock > 0 ? 'Còn ' + p.stock + ' sản phẩm' : 'Tạm hết hàng' }}</p>
+      <div>
+        <button [disabled]="p.stock < 1" (click)="add(p)">Thêm vào giỏ</button
+        ><a routerLink="/gio-hang">Xem giỏ hàng ({{ cart.count() }})</a>
+      </div>
+    </div>
+  } @else {
+    <p>{{ error() || 'Đang tải sản phẩm...' }}</p>
+  }
+</section>

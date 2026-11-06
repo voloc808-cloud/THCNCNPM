@@ -1,0 +1,32 @@
+<div class="customer-shell">
+  <aside>
+    <div class="profile-mini">
+      <span class="profile-avatar">
+        @if (auth.user()?.avatarUrl) {
+          <img [src]="auth.user()?.avatarUrl" alt="Ảnh đại diện" />
+        } @else {
+          {{ auth.user()?.fullName?.charAt(0) ?? 'K' }}
+        }
+      </span>
+      <div>
+        <strong>{{ auth.user()?.fullName }}</strong
+        ><small>Thành viên Royal</small>
+      </div>
+    </div>
+    <nav>
+      <a
+        routerLink="/customer"
+        [routerLinkActiveOptions]="{ exact: true }"
+        routerLinkActive="active"
+        ><i>⌂</i>Tổng quan</a
+      ><a routerLink="/customer/dat-lich" routerLinkActive="active"><i>✦</i>Đặt lịch</a
+      ><a routerLink="/customer/lich-hen" routerLinkActive="active"><i>◷</i>Lịch hẹn</a
+      ><a routerLink="/don-hang" routerLinkActive="active"><i>▣</i>Đơn hàng</a
+      ><a routerLink="/customer/ho-so" routerLinkActive="active"><i>◇</i>Hồ sơ</a>
+    </nav>
+    <div class="member-note">
+      <small>ROYAL MEMBER</small><strong>Tận hưởng trải nghiệm<br />dành riêng cho bạn.</strong>
+    </div>
+  </aside>
+  <main><router-outlet /></main>
+</div>

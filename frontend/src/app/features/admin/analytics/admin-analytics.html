@@ -1,0 +1,135 @@
+<section class="admin-page">
+  <header class="page-head">
+    <div>
+      <p class="eyebrow">ANALYTICS & REPORTS</p>
+      <h1>Báo cáo vận hành.</h1>
+      <p>Doanh thu dịch vụ, bán hàng và hiệu suất salon.</p>
+    </div>
+    <button class="button" (click)="exportCsv()">Xuất CSV</button>
+  </header>
+  <div class="toolbar">
+    <label>Từ ngày <input type="date" [(ngModel)]="dateFrom" /></label
+    ><label>Đến ngày <input type="date" [(ngModel)]="dateTo" /></label
+    ><button class="button secondary" (click)="load()">Áp dụng</button>
+  </div>
+  @if (error()) {
+    <p class="error">{{ error() }}</p>
+  }
+  @if (loading()) {
+    <p class="empty">Đang tổng hợp dữ liệu...</p>
+  }
+  @if (data(); as d) {
+    <div class="kpis">
+      <article>
+        <small>Tổng doanh thu</small
+        ><strong>{{ d.kpis.totalRevenue | currency: 'VND' : 'symbol' : '1.0-0' : 'vi-VN' }}</strong>
+      </article>
+      <article>
+        <small>Doanh thu dịch vụ</small
+        ><strong>{{
+          d.kpis.serviceRevenue | currency: 'VND' : 'symbol' : '1.0-0' : 'vi-VN'
+        }}</strong>
+      </article>
+      <article>
+        <small>Doanh thu sản phẩm</small
+        ><strong>{{
+          d.kpis.productRevenue | currency: 'VND' : 'symbol' : '1.0-0' : 'vi-VN'
+        }}</strong>
+      </article>
+      <article>
+        <small>Khách hàng mới</small><strong>{{ d.kpis.newCustomers }}</strong>
+      </article>
+      <article>
+        <small>Lịch hoàn thành</small><strong>{{ d.kpis.completedAppointments }}</strong>
+      </article>
+      <article>
+        <small>Tỷ lệ hủy / vắng</small
+        ><strong>{{ d.kpis.cancellationRate | number: '1.0-1' }}%</strong>
+      </article>
+    </div>
+    <article class="panel chart">
+      <h2>Doanh thu theo ngày</h2>
+      <div class="bars">
+        @for (day of d.dailyRevenue; track day.date) {
+          <div class="bar-col" [title]="(day.date | date: 'dd/MM') + ': ' + day.total">
+            <div class="bar"><i [style.height.%]="height(day.total)"></i></div>
+            <small>{{ day.date | date: 'dd/MM' }}</small>
+          </div>
+        }
+      </div>
+      <div class="legend">
+        <span><i></i>Dịch vụ + sản phẩm đã hoàn thành</span>
+      </div>
+    </article>
+    <div class="report-grid">
+      <article class="panel">
+        <h2>Dịch vụ nổi bật</h2>
+        @for (item of d.topServices; track item.id) {
+          <div class="rank">
+            <span
+              >{{ item.name }}<small>{{ item.count }} lượt</small></span
+            ><strong>{{ item.revenue | currency: 'VND' : 'symbol' : '1.0-0' : 'vi-VN' }}</strong>
+          </div>
+        } @empty {
+          <p class="empty">Chưa có dữ liệu.</p>
+        }
+      </article>
+      <article class="panel">
+        <h2>Sản phẩm bán chạy</h2>
+        @for (item of d.topProducts; track item.id) {
+          <div class="rank">
+            <span
+              >{{ item.name }}<small>{{ item.quantity }} sản phẩm</small></span
+            ><strong>{{ item.revenue | currency: 'VND' : 'symbol' : '1.0-0' : 'vi-VN' }}</strong>
+          </div>
+        } @empty {
+          <p class="empty">Chưa có dữ liệu.</p>
+        }
+      </article>
+      <article class="panel">
+        <h2>Hiệu suất nhân viên</h2>
+        @for (item of d.staffPerformance; track item.id) {
+          <div class="rank">
+            <span
+              >{{ item.name }}<small>{{ item.appointments }} lịch hoàn thành</small></span
+            ><strong>{{ item.revenue | currency: 'VND' : 'symbol' : '1.0-0' : 'vi-VN' }}</strong>
+          </div>
+        } @empty {
+          <p class="empty">Chưa có dữ liệu.</p>
+        }
+      </article>
+      <article class="panel low-stock">
+        <h2>Cảnh báo tồn kho</h2>
+        @for (item of d.lowStock; track item.id) {
+          <div class="rank">
+            <span
+              >{{ item.name }}<small>{{ item.sku }}</small></span
+            ><strong>{{ item.stock }}</strong>
+          </div>
+        } @empty {
+          <p class="ok">Tồn kho đang ổn định.</p>
+        }
+      </article>
+    </div>
+    <article class="panel status-panel">
+      <h2>Trạng thái lịch hẹn</h2>
+      <div class="status-grid">
+        @for (
+          item of [
+            ['PENDING', 'Chờ xác nhận'],
+            ['CONFIRMED', 'Đã xác nhận'],
+            ['COMPLETED', 'Hoàn thành'],
+            ['CANCELLED', 'Đã hủy'],
+            ['NO_SHOW', 'Vắng mặt'],
+          ];
+          track item[0]
+        ) {
+          <div>
+            <span>{{ item[1] }}</span
+            ><strong>{{ d.appointmentStatuses[item[0]] || 0 }}</strong>
+          </div>
+        }
+      </div>
+    </article>
+  }
+</section>

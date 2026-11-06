@@ -1,0 +1,64 @@
+<section class="admin-page">
+  <header class="page-head">
+    <div>
+      <p class="eyebrow">BÁN HÀNG</p>
+      <h1>Quản lý đơn hàng.</h1>
+      <p>Xác nhận, chuẩn bị, giao hàng và hoàn tất đơn.</p>
+    </div>
+  </header>
+  <div class="toolbar">
+    <select [(ngModel)]="filter" (change)="load()">
+      <option value="">Tất cả trạng thái</option>
+      @for (s of statuses; track s) {
+        <option [value]="s">{{ label(s) }}</option>
+      }
+    </select>
+  </div>
+  @if (error()) {
+    <p class="error">{{ error() }}</p>
+  }
+  @if (notice()) {
+    <p class="notice">{{ notice() }}</p>
+  }
+  <div class="orders">
+    @for (item of items(); track item.id) {
+      <article>
+        <header>
+          <div>
+            <strong>{{ item.code }}</strong
+            ><small
+              >{{ item.createdAt | date: 'dd/MM/yyyy HH:mm' }} · {{ item.user?.fullName }}</small
+            >
+          </div>
+          <span class="status {{ item.status }}">{{ label(item.status) }}</span>
+        </header>
+        <div class="body">
+          <div>
+            @for (line of item.items; track line.productId) {
+              <p>
+                {{ line.productName }} × {{ line.quantity }}
+                <strong>{{
+                  line.lineTotal | currency: 'VND' : 'symbol' : '1.0-0' : 'vi-VN'
+                }}</strong>
+              </p>
+            }
+          </div>
+          <address>
+            <strong>{{ item.recipientName }} · {{ item.recipientPhone }}</strong
+            ><span>{{ item.shippingAddress }}</span>
+          </address>
+        </div>
+        <footer>
+          <strong>{{ item.total | currency: 'VND' : 'symbol' : '1.0-0' : 'vi-VN' }}</strong>
+          <div class="actions">
+            @for (status of next(item.status); track status) {
+              <button (click)="update(item, status)">{{ label(status) }}</button>
+            }
+          </div>
+        </footer>
+      </article>
+    } @empty {
+      <p class="empty">Chưa có đơn hàng phù hợp.</p>
+    }
+  </div>
+</section>

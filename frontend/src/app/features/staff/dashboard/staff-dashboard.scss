@@ -1,0 +1,32 @@
+@use '../staff-common';
+.today {
+  margin-top: 18px;
+}
+.today article {
+  display: grid;
+  grid-template-columns: 70px 1fr auto;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid #29251f;
+}
+.today time {
+  color: #d0a65e;
+  font: 22px var(--font-serif);
+}
+.today strong {
+  color: #d1c8bb;
+}
+.today p {
+  margin: 5px 0 0;
+  color: #7f776c;
+  font-size: 11px;
+}
+@media (max-width: 550px) {
+  .today article {
+    grid-template-columns: 60px 1fr;
+  }
+  .today .status {
+    grid-column: 2;
+  }
+}

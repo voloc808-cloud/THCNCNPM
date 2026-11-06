@@ -1,0 +1,72 @@
+@use '../admin-common';
+.card strong {
+  font-size: 28px;
+}
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 0.8fr;
+  gap: 18px;
+  margin-top: 18px;
+}
+.panel {
+  padding: 22px;
+  border: 1px solid #302a22;
+  background: #100f0d;
+}
+.panel h2 {
+  margin: 0 0 18px;
+  font: 24px var(--font-serif);
+}
+.revenue-row {
+  display: grid;
+  grid-template-columns: 80px 1fr 115px;
+  align-items: center;
+  gap: 10px;
+  margin: 9px 0;
+  color: #797166;
+  font-size: 9px;
+}
+.revenue-row i {
+  height: 6px;
+  background: #272119;
+}
+.revenue-row b {
+  display: block;
+  height: 100%;
+  background: #b98b49;
+}
+.revenue-row strong {
+  text-align: right;
+  color: #b9a78d;
+  font-size: 10px;
+}
+.attention {
+  display: grid;
+  gap: 10px;
+}
+.attention span {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px;
+  border: 1px solid #302a22;
+  color: #8e8477;
+  font-size: 11px;
+}
+.attention strong {
+  color: #d7b573;
+  font: 24px var(--font-serif);
+}
+@media (max-width: 950px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 600px) {
+  .revenue-row {
+    grid-template-columns: 65px 1fr;
+  }
+  .revenue-row strong {
+    grid-column: 2;
+  }
+}

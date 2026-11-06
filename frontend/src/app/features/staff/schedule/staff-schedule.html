@@ -1,0 +1,76 @@
+<section class="staff-page">
+  <header class="page-head">
+    <div>
+      <p class="eyebrow">THỜI GIAN LÀM VIỆC</p>
+      <h1>Lịch tuần & ngày nghỉ.</h1>
+      <p>Xem ca định kỳ và gửi yêu cầu nghỉ đến quản trị viên.</p>
+    </div>
+  </header>
+  @if (error()) {
+    <p class="error">{{ error() }}</p>
+  }
+  @if (notice()) {
+    <p class="notice">{{ notice() }}</p>
+  }
+  <div class="schedule-grid">
+    <article class="panel">
+      <h2>Ca làm việc hàng tuần</h2>
+      <div class="week">
+        @for (day of days; track $index) {
+          <div>
+            <strong>{{ day }}</strong
+            ><span>
+              @for (shift of shifts(); track shift.id) {
+                @if (shift.dayOfWeek === $index && shift.isActive) {
+                  <em>{{ time(shift.startTime) }} – {{ time(shift.endTime) }}</em>
+                }
+              }
+            </span>
+          </div>
+        }
+      </div>
+    </article>
+    <article class="panel">
+      <h2>Đăng ký ngày nghỉ</h2>
+      <div class="form-grid">
+        <label>Bắt đầu
+          <span class="date-field"><input #startDateInput type="date" [(ngModel)]="startDate" /><button type="button" aria-label="Chọn ngày bắt đầu" (click)="openDatePicker(startDateInput)">▦</button></span>
+          <input type="time" [(ngModel)]="startTime" aria-label="Giờ bắt đầu" />
+        </label
+        ><label>Kết thúc
+          <span class="date-field"><input #endDateInput type="date" [(ngModel)]="endDate" [min]="startDate" /><button type="button" aria-label="Chọn ngày kết thúc" (click)="openDatePicker(endDateInput)">▦</button></span>
+          <input type="time" [(ngModel)]="endTime" aria-label="Giờ kết thúc" />
+        </label
+        ><label class="wide"
+          >Lý do<textarea [(ngModel)]="reason" placeholder="Lý do xin nghỉ..."></textarea>
+        </label>
+      </div>
+      <button class="button" [disabled]="saving() || !startDate || !endDate" (click)="request()">
+        {{ saving() ? 'Đang gửi...' : 'Gửi yêu cầu' }}
+      </button>
+    </article>
+  </div>
+  <article class="panel requests">
+    <h2>Yêu cầu đã gửi</h2>
+    @for (item of daysOff(); track item.id) {
+      <div>
+        <span
+          ><strong
+            >{{ item.startAt | date: 'dd/MM/yyyy HH:mm' }} –
+            {{ item.endAt | date: 'dd/MM/yyyy HH:mm' }}</strong
+          ><small>{{ item.reason || 'Không có lý do' }}</small></span
+        ><span class="request-action"
+          ><i class="status {{ item.status }}">{{ statusText(item.status) }}</i>
+          @if (notifications.isUnread(item)) {
+            <button class="button secondary" type="button" (click)="notifications.markRead(item)">Đã đọc</button>
+          }
+          @if (item.status === 'PENDING') {
+            <button class="button danger" (click)="cancel(item)">Hủy yêu cầu</button>
+          }
+        </span>
+      </div>
+    } @empty {
+      <p class="empty">Chưa có yêu cầu nghỉ.</p>
+    }
+  </article>
+</section>

@@ -1,0 +1,48 @@
+<section class="orders page-container">
+  <header>
+    <p>ĐƠN HÀNG CỦA TÔI</p>
+    <h1>Theo dõi mua hàng.</h1>
+  </header>
+  <div class="filter">
+    <select [(ngModel)]="filter" (change)="load()">
+      <option value="">Tất cả trạng thái</option>
+      @for (s of statuses; track s) {
+        <option [value]="s">{{ label(s) }}</option>
+      }
+    </select>
+  </div>
+  @if (error()) {
+    <p class="error">{{ error() }}</p>
+  }
+  @if (notice()) {
+    <p class="notice">{{ notice() }}</p>
+  }
+  <div class="list">
+    @for (item of items(); track item.id) {
+      <article>
+        <header>
+          <div>
+            <strong>{{ item.code }}</strong
+            ><small>{{ item.createdAt | date: 'dd/MM/yyyy HH:mm' }}</small>
+          </div>
+          <span class="status {{ item.status }}">{{ label(item.status) }}</span>
+        </header>
+        @for (line of item.items; track line.productId) {
+          <div class="line">
+            <span>{{ line.productName }} × {{ line.quantity }}</span
+            ><strong>{{ line.lineTotal | currency: 'VND' : 'symbol' : '1.0-0' : 'vi-VN' }}</strong>
+          </div>
+        }
+        <footer>
+          <span>Giao đến: {{ item.shippingAddress }}</span
+          ><strong>{{ item.total | currency: 'VND' : 'symbol' : '1.0-0' : 'vi-VN' }}</strong>
+          @if (item.status === 'PENDING') {
+            <button (click)="cancel(item)">Hủy đơn</button>
+          }
+        </footer>
+      </article>
+    } @empty {
+      <p>{{ loading() ? 'Đang tải...' : 'Bạn chưa có đơn hàng.' }}</p>
+    }
+  </div>
+</section>

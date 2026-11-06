@@ -1,0 +1,132 @@
+<section class="profile-page">
+  <header>
+    <p class="eyebrow">Tài khoản của tôi</p>
+    <h1>Hồ sơ</h1>
+    <p>Quản lý thông tin cá nhân và bảo mật tài khoản.</p>
+  </header>
+  <div class="tabs">
+    <button type="button" [class.active]="tab() === 'profile'" (click)="tab.set('profile')">
+      Thông tin cá nhân</button
+    ><button type="button" [class.active]="tab() === 'security'" (click)="tab.set('security')">
+      Mật khẩu & bảo mật
+    </button>
+  </div>
+  @if (error()) {
+    <div class="alert">{{ error() }}</div>
+  }
+  @if (notice()) {
+    <div class="notice">✓ {{ notice() }}</div>
+  }
+  @if (loading()) {
+    <div class="loading">Đang tải hồ sơ...</div>
+  } @else if (tab() === 'profile') {
+    <form [formGroup]="profileForm" (ngSubmit)="saveProfile()">
+      <aside>
+        <div class="avatar">
+          @if (avatar()) {
+            <img [src]="avatar()" alt="Ảnh đại diện" />
+          } @else {
+            <span>{{ profileForm.controls.fullName.value.charAt(0) || 'K' }}</span>
+          }
+        </div>
+        <p>
+          Ảnh đại diện dùng đường dẫn HTTPS.<br />Upload trực tiếp sẽ được bổ sung trong trang quản
+          trị.
+        </p>
+      </aside>
+      <div class="form-content">
+        <div class="form-row">
+          <div class="form-field">
+            <label for="profileName">Họ và tên</label
+            ><input
+              id="profileName"
+              formControlName="fullName"
+              [class.invalid]="
+                profileForm.controls.fullName.invalid && profileForm.controls.fullName.touched
+              "
+            /><span class="field-error">{{
+              profileForm.controls.fullName.invalid && profileForm.controls.fullName.touched
+                ? 'Tên phải có ít nhất 2 ký tự.'
+                : ''
+            }}</span>
+          </div>
+          <div class="form-field">
+            <label for="profilePhone">Điện thoại</label
+            ><input
+              id="profilePhone"
+              formControlName="phone"
+              autocomplete="tel"
+              [class.invalid]="
+                profileForm.controls.phone.invalid && profileForm.controls.phone.touched
+              "
+            /><span class="field-error">{{
+              profileForm.controls.phone.invalid && profileForm.controls.phone.touched
+                ? 'Số điện thoại không hợp lệ.'
+                : ''
+            }}</span>
+          </div>
+        </div>
+        <div class="form-field">
+          <label for="birthDate">Ngày sinh</label
+          ><input id="birthDate" type="date" formControlName="dateOfBirth" /><span
+            class="field-error"
+          ></span>
+        </div>
+        <div class="form-field">
+          <label for="avatarUrl">URL ảnh đại diện</label
+          ><input
+            id="avatarUrl"
+            formControlName="avatarUrl"
+            placeholder="https://..."
+            (blur)="previewAvatar()"
+            [class.invalid]="
+              profileForm.controls.avatarUrl.invalid && profileForm.controls.avatarUrl.touched
+            "
+          /><span class="field-error">{{
+            profileForm.controls.avatarUrl.invalid && profileForm.controls.avatarUrl.touched
+              ? 'URL phải bắt đầu bằng http:// hoặc https://'
+              : ''
+          }}</span>
+        </div>
+        <button class="button" type="submit" [disabled]="saving()">
+          {{ saving() ? 'Đang lưu...' : 'Lưu thay đổi' }}
+        </button>
+      </div>
+    </form>
+  } @else {
+    <form class="security-form" [formGroup]="passwordForm" (ngSubmit)="changePassword()">
+      <div>
+        <p class="eyebrow">Đổi mật khẩu</p>
+        <h2>Bảo vệ tài khoản</h2>
+        <p>Sau khi đổi mật khẩu, tất cả phiên đăng nhập hiện tại sẽ hết hiệu lực.</p>
+      </div>
+      <div class="form-content">
+        <div class="form-field">
+          <label for="currentPassword">Mật khẩu hiện tại</label
+          ><input
+            id="currentPassword"
+            type="password"
+            formControlName="currentPassword"
+            autocomplete="current-password"
+          /><span class="field-error"></span>
+        </div>
+        <div class="form-field">
+          <label for="newPassword">Mật khẩu mới</label
+          ><input
+            id="newPassword"
+            type="password"
+            formControlName="newPassword"
+            autocomplete="new-password"
+          /><span class="field-error">{{
+            passwordForm.controls.newPassword.invalid && passwordForm.controls.newPassword.touched
+              ? 'Cần 8 ký tự, chữ hoa, thường và số.'
+              : ''
+          }}</span>
+        </div>
+        <button class="button" type="submit" [disabled]="saving()">
+          {{ saving() ? 'Đang cập nhật...' : 'Đổi mật khẩu' }}
+        </button>
+      </div>
+    </form>
+  }
+</section>

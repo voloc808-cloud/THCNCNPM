@@ -1,0 +1,128 @@
+:host {
+  display: block;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.header {
+  height: 76px;
+  padding: 0 clamp(20px, 5vw, 72px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(10, 10, 10, 0.92);
+  border-bottom: 1px solid rgba(198, 151, 72, 0.2);
+  backdrop-filter: blur(18px);
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  color: #f5f0e7;
+  text-decoration: none;
+}
+.brand-logo {
+  display: block;
+  width: 70px;
+  height: 70px;
+  background: #c69748;
+  mask: url('/assets/images/royal-barber-logo.png') center / contain no-repeat;
+  mask-mode: luminance;
+}
+nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(18px, 2.5vw, 38px);
+}
+nav a,
+.nav-logout {
+  font:
+    600 11px/1 Arial,
+    sans-serif;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: #aaa39a;
+  text-decoration: none;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  padding: 10px 0;
+  transition: 0.2s;
+}
+nav a:hover,
+nav a.active,
+.nav-logout:hover {
+  color: #e0b867;
+}
+.book {
+  padding: 13px 19px !important;
+  border: 1px solid #b98a3f !important;
+  color: #e9c77e !important;
+}
+.header-badge {
+  display: inline-grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  margin-left: 5px;
+  padding: 0 5px;
+  border-radius: 10px;
+  background: #c49a5a;
+  color: #130f0a;
+  font: 700 11px/1 Arial, sans-serif;
+  letter-spacing: 0;
+}
+.menu-button {
+  display: none;
+  background: none;
+  border: 0;
+  padding: 8px;
+}
+.menu-button span {
+  display: block;
+  width: 25px;
+  height: 1px;
+  margin: 6px;
+  background: #d7aa5c;
+}
+@media (max-width: 820px) {
+  .menu-button {
+    display: block;
+  }
+  nav {
+    display: none;
+    position: absolute;
+    top: 76px;
+    left: 0;
+    right: 0;
+    padding: 24px;
+    background: #0c0c0c;
+    border-bottom: 1px solid #342a1e;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 5px;
+  }
+  nav.open {
+    display: flex;
+  }
+  nav a,
+  .nav-logout {
+    text-align: left;
+    padding: 13px 4px;
+  }
+  .book {
+    text-align: center !important;
+    margin-top: 8px;
+  }
+}
+
+:host-context(body.light-theme) .header { background: rgba(248, 242, 232, 0.92); border-bottom-color: rgba(153, 108, 45, 0.25); box-shadow: 0 8px 30px rgba(89, 65, 35, 0.07); }
+:host-context(body.light-theme) .brand { color: #211a13; }
+:host-context(body.light-theme) .brand-logo { background: #9b6d27; }
+:host-context(body.light-theme) .brand small,
+:host-context(body.light-theme) nav a,
+:host-context(body.light-theme) .nav-logout { color: #75695c; }
+:host-context(body.light-theme) nav a:hover,
+:host-context(body.light-theme) nav a.active,
+:host-context(body.light-theme) .nav-logout:hover { color: #9b6d27; }
+@media (max-width: 820px) { :host-context(body.light-theme) nav { background: #f8f1e6; border-bottom-color: #d4c19f; } }

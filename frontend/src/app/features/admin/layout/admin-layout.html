@@ -1,0 +1,31 @@
+<div class="admin-shell">
+  <aside>
+    <div class="identity">
+      <span>RB</span>
+      <div>
+        <strong>ADMIN CONSOLE</strong><small>{{ auth.user()?.fullName }}</small>
+      </div>
+    </div>
+    <nav>
+      <a routerLink="/admin" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="active"
+        >⌂ <span>Tổng quan</span></a
+      ><a routerLink="/admin/dich-vu" routerLinkActive="active">✦ <span>Dịch vụ</span></a
+      ><a routerLink="/admin/bo-suu-tap" routerLinkActive="active">▧ <span>Bộ sưu tập</span></a
+      ><a routerLink="/admin/san-pham" routerLinkActive="active">▣ <span>Sản phẩm</span></a
+      ><a routerLink="/admin/don-hang" routerLinkActive="active">◇ <span>Đơn hàng</span></a
+      ><a routerLink="/admin/bao-cao" routerLinkActive="active">▥ <span>Báo cáo</span></a
+      ><a routerLink="/admin/nhan-vien" routerLinkActive="active">♙ <span>Nhân viên</span></a
+      ><a routerLink="/admin/khach-hang" routerLinkActive="active">♢ <span>Khách hàng</span></a
+      ><a routerLink="/admin/lich-hen" routerLinkActive="active">◷ <span>Lịch hẹn</span>@if (notifications.unreadAppointments()) { <span class="nav-badge" [attr.aria-label]="notifications.unreadAppointments() + ' lịch hẹn chưa đọc'">{{ notifications.unreadAppointments() }}</span> }</a
+      ><a routerLink="/admin/danh-gia" routerLinkActive="active">★ <span>Đánh giá</span></a
+      ><a routerLink="/admin/lich-lam-viec" routerLinkActive="active"
+        >▦ <span>Lịch làm việc</span>@if (notifications.unreadDaysOff()) { <span class="nav-badge" [attr.aria-label]="notifications.unreadDaysOff() + ' đơn nghỉ chưa đọc'">{{ notifications.unreadDaysOff() }}</span> }</a
+      >
+    </nav>
+    <div class="aside-note">
+      <small>ROYAL BARBER</small>
+      <p>Không gian điều hành salon.</p>
+    </div>
+  </aside>
+  <main><router-outlet /></main>
+</div>

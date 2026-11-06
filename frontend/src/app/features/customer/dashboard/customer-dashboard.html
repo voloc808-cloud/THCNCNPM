@@ -1,0 +1,17 @@
+<section class="dashboard">
+  <p class="eyebrow">Không gian khách hàng</p>
+  <h1>
+    Xin chào, <i>{{ auth.user()?.fullName }}</i>
+  </h1>
+  <p class="welcome">Hôm nay là một ngày đẹp để làm mới diện mạo.</p>
+  <div class="quick-grid">
+    <a routerLink="dat-lich" class="primary-card"
+      ><span>Đặt lịch mới</span><strong>Chọn dịch vụ & khung giờ</strong><i>→</i></a
+    ><a routerLink="lich-hen"><span>Lịch hẹn</span><strong>Xem và quản lý lịch</strong><i>◷</i></a
+    ><a routerLink="ho-so"><span>Hồ sơ</span><strong>Cập nhật thông tin</strong><i>◇</i></a>
+  </div>
+  <div class="ritual">
+    <span>ROYAL NOTE · 01</span>
+    <blockquote>“Phong cách tốt nhất là phong cách khiến bạn cảm thấy đúng là mình.”</blockquote>
+  </div>
+</section>

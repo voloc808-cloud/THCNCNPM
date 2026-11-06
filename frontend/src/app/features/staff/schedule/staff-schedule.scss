@@ -1,0 +1,104 @@
+@use '../staff-common';
+.date-field {
+  display: flex;
+  align-items: stretch;
+}
+.date-field input {
+  min-width: 0;
+  flex: 1;
+}
+.date-field button {
+  padding: 0 12px;
+  border: 1px solid #5b472b;
+  background: #211a11;
+  color: #dfb86e;
+  cursor: pointer;
+}
+.form-grid label > input[type='time'] {
+  margin-top: 8px;
+}
+.form-grid input[type='time'],
+.form-grid input[type='date'] {
+  color-scheme: dark;
+}
+.form-grid input[type='time']::-webkit-calendar-picker-indicator,
+.form-grid input[type='date']::-webkit-calendar-picker-indicator {
+  opacity: 1;
+  cursor: pointer;
+}
+.schedule-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 18px;
+}
+.week {
+  display: grid;
+  gap: 7px;
+}
+.week > div {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 15px;
+  padding: 11px 0;
+  border-bottom: 1px solid #29251f;
+}
+.week strong {
+  color: #aa9e8c;
+  font-size: 11px;
+}
+.week span {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+.week em {
+  padding: 5px 8px;
+  color: #cfab6b;
+  border: 1px solid #453b2d;
+  font-size: 10px;
+  font-style: normal;
+}
+.panel .button {
+  margin-top: 17px;
+}
+.requests {
+  margin-top: 18px;
+}
+.requests > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 14px 0;
+  border-bottom: 1px solid #29251f;
+}
+.requests span:first-child {
+  display: grid;
+  gap: 6px;
+}
+.requests small {
+  color: #7e766b;
+}
+.request-action {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.request-action .button {
+  margin: 0;
+}
+@media (max-width: 950px) {
+  .schedule-grid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 600px) {
+  .requests > div {
+    align-items: start;
+    flex-direction: column;
+  }
+  .request-action {
+    width: 100%;
+    justify-content: space-between;
+  }
+}

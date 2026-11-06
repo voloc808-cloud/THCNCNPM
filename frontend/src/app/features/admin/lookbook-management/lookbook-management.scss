@@ -1,0 +1,60 @@
+@use '../admin-common';
+.lookbook-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+.lookbook-grid article {
+  overflow: hidden;
+  border: 1px solid #302a22;
+  background: #11100e;
+}
+.preview {
+  aspect-ratio: 4/3;
+  background: #19140f;
+}
+.preview img,
+.form-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.item-copy {
+  padding: 17px;
+}
+.item-copy > span,
+.item-copy > small {
+  color: #9a7845;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.item-copy h2 {
+  margin: 8px 0 5px;
+  font: 22px var(--font-serif);
+}
+.item-copy .actions {
+  margin-top: 15px;
+}
+.form-preview {
+  height: 240px;
+  border: 1px solid #3b342a;
+}
+.upload-note {
+  margin: 0;
+  color: #c9a461;
+  font-size: 11px;
+}
+.empty {
+  grid-column: 1/-1;
+}
+@media (max-width: 950px) {
+  .lookbook-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 600px) {
+  .lookbook-grid {
+    grid-template-columns: 1fr;
+  }
+}

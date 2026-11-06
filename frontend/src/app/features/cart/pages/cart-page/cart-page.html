@@ -1,0 +1,52 @@
+<section class="cart page-container">
+  <header>
+    <p>ROYAL STORE</p>
+    <h1>Giỏ hàng.</h1>
+  </header>
+  @if (cart.items().length) {
+    <div class="layout">
+      <div class="lines">
+        @for (item of cart.items(); track item.product.id) {
+          <article>
+            <div class="visual">
+              @if (item.product.imageUrl) {
+                <img [src]="item.product.imageUrl" [alt]="item.product.name" />
+              } @else {
+                <span>RB</span>
+              }
+            </div>
+            <div>
+              <h2>{{ item.product.name }}</h2>
+              <small>{{ item.product.sku }}</small
+              ><strong>{{
+                item.product.price | currency: 'VND' : 'symbol' : '1.0-0' : 'vi-VN'
+              }}</strong>
+            </div>
+            <input
+              type="number"
+              min="1"
+              [max]="item.product.stock"
+              [value]="item.quantity"
+              (change)="cart.setQuantity(item.product.id, +$any($event.target).value)"
+            /><button (click)="cart.remove(item.product.id)">Xóa</button>
+          </article>
+        }
+      </div>
+      <aside>
+        <h2>Tóm tắt đơn</h2>
+        <p>
+          <span>Tạm tính</span
+          ><strong>{{ cart.subtotal() | currency: 'VND' : 'symbol' : '1.0-0' : 'vi-VN' }}</strong>
+        </p>
+        <p><span>Phí giao hàng</span><span>Tính khi checkout</span></p>
+        <a routerLink="/thanh-toan">Tiến hành đặt hàng</a
+        ><a class="back" routerLink="/san-pham">Tiếp tục mua</a>
+      </aside>
+    </div>
+  } @else {
+    <div class="empty">
+      <h2>Giỏ hàng đang trống.</h2>
+      <a routerLink="/san-pham">Khám phá sản phẩm</a>
+    </div>
+  }
+</section>

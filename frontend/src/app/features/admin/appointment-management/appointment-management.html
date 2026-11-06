@@ -1,0 +1,116 @@
+<section class="admin-page">
+  <header class="page-head">
+    <div>
+      <p class="eyebrow">VẬN HÀNH</p>
+      <h1>Quản lý lịch hẹn.</h1>
+      <p>Theo dõi, xác nhận, hoàn thành, hủy hoặc đổi thời gian.</p>
+    </div>
+  </header>
+  <div class="toolbar">
+    <select [(ngModel)]="filter" (change)="load()">
+      <option value="">Tất cả trạng thái</option>
+      @for (s of statuses; track s) {
+        <option [value]="s">{{ label(s) }}</option>
+      }
+    </select>
+  </div>
+  @if (error()) {
+    <p class="error">{{ error() }}</p>
+  }
+  @if (notice()) {
+    <p class="notice">{{ notice() }}</p>
+  }
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Mã</th>
+          <th>Khách hàng</th>
+          <th>Nhân viên</th>
+          <th>Thời gian</th>
+          <th>Dịch vụ</th>
+          <th>Tổng tiền</th>
+          <th>Trạng thái</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of items(); track item.id) {
+          <tr>
+            <td>
+              <strong>{{ item.code }}</strong>
+            </td>
+            <td>
+              {{ item.customer.user.fullName }}<br /><small>{{
+                item.customer.user.phone || item.customer.user.email
+              }}</small>
+            </td>
+            <td>{{ item.staff.user.fullName }}</td>
+            <td>{{ item.startAt | date: 'dd/MM/yyyy HH:mm' }}</td>
+            <td>
+              {{ item.services[0]?.serviceName
+              }}<small>
+                @if (item.services.length > 1) {
+                  +{{ item.services.length - 1 }}
+                }
+              </small>
+            </td>
+            <td>{{ item.totalPrice | currency: 'VND' : 'symbol' : '1.0-0' : 'vi-VN' }}</td>
+            <td>
+              <span class="status {{ item.status }}">{{ label(item.status) }}</span>
+            </td>
+            <td class="actions">
+              @if (notifications.isAppointmentUnread(item)) {
+                <button type="button" (click)="notifications.markAppointmentRead(item)">Đã đọc</button>
+              }
+              <button (click)="open(item)">Cập nhật</button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="8">{{ loading() ? 'Đang tải...' : 'Chưa có lịch hẹn.' }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  @if (meta(); as m) {
+    <div class="pagination">
+      <button class="button secondary" [disabled]="m.page <= 1" (click)="load(m.page - 1)">
+        Trước</button
+      ><span>{{ m.page }} / {{ m.totalPages || 1 }}</span
+      ><button
+        class="button secondary"
+        [disabled]="m.page >= m.totalPages"
+        (click)="load(m.page + 1)"
+      >
+        Sau
+      </button>
+    </div>
+  }
+  @if (target(); as item) {
+    <div class="modal-backdrop" (click)="close()">
+      <div class="modal" (click)="$event.stopPropagation()">
+        <h2>{{ item.code }}</h2>
+        <div class="form-grid">
+          <label
+            >Trạng thái<select [(ngModel)]="status">
+              @for (s of statuses; track s) {
+                <option [value]="s">{{ label(s) }}</option>
+              }
+            </select></label
+          ><label>Thời gian mới<input type="datetime-local" [(ngModel)]="startAt" /></label
+          ><label class="wide">Lý do hủy / ghi chú<textarea [(ngModel)]="reason"></textarea></label>
+        </div>
+        <div class="modal-actions">
+          <button class="button secondary" (click)="close()">Đóng</button
+          ><button class="button secondary" [disabled]="saving()" (click)="saveTime()">
+            Đổi giờ</button
+          ><button class="button" [disabled]="saving()" (click)="saveStatus()">
+            Cập nhật trạng thái
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</section>

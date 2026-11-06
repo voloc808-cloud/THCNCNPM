@@ -1,0 +1,103 @@
+<section class="auth-page">
+  <aside class="auth-visual">
+    <div class="quote">
+      <blockquote>“Một diện mạo chỉn chu là bước đầu của mọi cuộc gặp quan trọng.”</blockquote>
+      <p>Gia nhập cộng đồng Royal Barber</p>
+    </div>
+  </aside>
+  <div class="auth-panel">
+    <div class="auth-card">
+      <p class="eyebrow">Tạo tài khoản</p>
+      <h1>Đăng ký</h1>
+      <p class="subtitle">Đặt lịch nhanh hơn và lưu lại lịch sử phong cách của bạn.</p>
+      @if (serverError()) {
+        <div class="alert" role="alert">{{ serverError() }}</div>
+      }
+      <form class="auth-form" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+        <div class="form-row">
+          <div class="form-field">
+            <label for="fullName">Họ và tên</label
+            ><input
+              id="fullName"
+              formControlName="fullName"
+              autocomplete="name"
+              placeholder="Nguyễn Văn A"
+              [class.invalid]="invalid('fullName')"
+            /><span class="field-error">{{
+              invalid('fullName') ? 'Nhập ít nhất 2 ký tự.' : ''
+            }}</span>
+          </div>
+          <div class="form-field">
+            <label for="phone">Điện thoại</label
+            ><input
+              id="phone"
+              formControlName="phone"
+              autocomplete="tel"
+              placeholder="09xxxxxxxx"
+              [class.invalid]="invalid('phone')"
+            /><span class="field-error">{{
+              invalid('phone') ? 'Số điện thoại không hợp lệ.' : ''
+            }}</span>
+          </div>
+        </div>
+        <div class="form-field">
+          <label for="email">Email</label
+          ><input
+            id="email"
+            type="email"
+            formControlName="email"
+            autocomplete="email"
+            placeholder="ban@example.com"
+            [class.invalid]="invalid('email')"
+          /><span class="field-error">{{ invalid('email') ? 'Email không hợp lệ.' : '' }}</span>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label for="password">Mật khẩu</label>
+            <div class="input-wrap">
+              <input
+                id="password"
+                [type]="showPassword() ? 'text' : 'password'"
+                formControlName="password"
+                autocomplete="new-password"
+                placeholder="Ít nhất 8 ký tự"
+                [class.invalid]="invalid('password')"
+              /><button
+                class="show-password"
+                type="button"
+                (click)="showPassword.set(!showPassword())"
+              >
+                {{ showPassword() ? 'Ẩn' : 'Hiện' }}
+              </button>
+            </div>
+            <span class="field-error">{{
+              invalid('password') ? 'Cần 8 ký tự, chữ hoa, thường và số.' : ''
+            }}</span>
+          </div>
+          <div class="form-field">
+            <label for="confirmPassword">Nhập lại mật khẩu</label
+            ><input
+              id="confirmPassword"
+              [type]="showPassword() ? 'text' : 'password'"
+              formControlName="confirmPassword"
+              autocomplete="new-password"
+              placeholder="Nhập lại mật khẩu"
+              [class.invalid]="
+                invalid('confirmPassword') ||
+                !!(form.errors?.['passwordMismatch'] && form.controls.confirmPassword.touched)
+              "
+            /><span class="field-error">{{
+              form.errors?.['passwordMismatch'] && form.controls.confirmPassword.touched
+                ? 'Mật khẩu chưa trùng khớp.'
+                : ''
+            }}</span>
+          </div>
+        </div>
+        <button class="button submit" type="submit" [disabled]="submitting()">
+          {{ submitting() ? 'Đang tạo tài khoản...' : 'Tạo tài khoản' }}
+        </button>
+      </form>
+      <p class="switch">Đã có tài khoản? <a routerLink="/login">Đăng nhập</a></p>
+    </div>
+  </div>
+</section>

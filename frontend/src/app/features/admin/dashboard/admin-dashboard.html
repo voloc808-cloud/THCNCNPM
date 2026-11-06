@@ -1,0 +1,57 @@
+<section class="admin-page">
+  <header class="page-head">
+    <div>
+      <p class="eyebrow">TRUNG TÂM QUẢN TRỊ</p>
+      <h1>Tổng quan 30 ngày.</h1>
+      <p>Doanh thu, khách hàng và nhịp vận hành gần nhất.</p>
+    </div>
+    <a class="button" routerLink="/admin/bao-cao">Xem báo cáo đầy đủ</a>
+  </header>
+  @if (error()) {
+    <p class="error">{{ error() }}</p>
+  }
+  @if (loading()) {
+    <p class="empty">Đang tổng hợp dữ liệu...</p>
+  }
+  @if (data(); as d) {
+    <div class="cards">
+      <article class="card">
+        <small>Tổng doanh thu</small
+        ><strong>{{ d.kpis.totalRevenue | currency: 'VND' : 'symbol' : '1.0-0' : 'vi-VN' }}</strong>
+      </article>
+      <article class="card">
+        <small>Lịch hoàn thành</small><strong>{{ d.kpis.completedAppointments }}</strong>
+      </article>
+      <article class="card">
+        <small>Đơn hoàn thành</small><strong>{{ d.kpis.completedOrders }}</strong>
+      </article>
+      <article class="card">
+        <small>Khách mới</small><strong>{{ d.kpis.newCustomers }}</strong>
+      </article>
+    </div>
+    <div class="dashboard-grid">
+      <article class="panel">
+        <h2>Doanh thu 10 ngày gần nhất</h2>
+        @for (day of d.dailyRevenue.slice(-10); track day.date) {
+          <div class="revenue-row">
+            <span>{{ day.date }}</span
+            ><i><b [style.width.%]="width(day.total)"></b></i
+            ><strong>{{ day.total | currency: 'VND' : 'symbol' : '1.0-0' : 'vi-VN' }}</strong>
+          </div>
+        }
+      </article>
+      <article class="panel">
+        <h2>Cần chú ý</h2>
+        <div class="attention">
+          <span
+            >Tỷ lệ hủy / vắng<strong>{{ d.kpis.cancellationRate | number: '1.0-1' }}%</strong></span
+          ><span
+            >Sản phẩm tồn thấp<strong>{{ d.lowStock.length }}</strong></span
+          ><span
+            >Lịch đang chờ<strong>{{ d.appointmentStatuses['PENDING'] || 0 }}</strong></span
+          >
+        </div>
+      </article>
+    </div>
+  }
+</section>

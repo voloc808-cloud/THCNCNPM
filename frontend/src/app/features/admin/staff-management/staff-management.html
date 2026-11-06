@@ -1,0 +1,139 @@
+<section class="admin-page">
+  <header class="page-head">
+    <div>
+      <p class="eyebrow">ĐỘI NGŨ</p>
+      <h1>Quản lý nhân viên.</h1>
+      <p>Admin cấp tài khoản đăng nhập, quản lý chuyên môn và trạng thái nhận lịch của thợ.</p>
+    </div>
+    <button class="button" (click)="open()">+ Cấp tài khoản thợ</button>
+  </header>
+  <div class="toolbar">
+    <input
+      [(ngModel)]="search"
+      (keyup.enter)="load()"
+      placeholder="Tên, email, chuyên môn..."
+    /><button class="button secondary" (click)="load()">Tìm</button>
+  </div>
+  @if (error()) {
+    <p class="error">{{ error() }}</p>
+  }
+  @if (notice()) {
+    <p class="notice">{{ notice() }}</p>
+  }
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Nhân viên</th>
+          <th>Liên hệ</th>
+          <th>Chuyên môn</th>
+          <th>Kinh nghiệm</th>
+          <th>Trạng thái</th>
+          <th>Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of items(); track item.id) {
+          <tr>
+            <td>
+              <strong>{{ item.user.fullName }}</strong
+              ><br /><small>{{ item.user.email }}</small>
+            </td>
+            <td>{{ item.user.phone || '—' }}</td>
+            <td>{{ item.specialties || '—' }}</td>
+            <td>{{ item.yearsOfExperience }} năm</td>
+            <td>
+              <span class="status" [class.ACTIVE]="item.user.status === 'ACTIVE'">{{
+                item.user.status
+              }}</span
+              ><br /><small>{{ item.isBookable ? 'Nhận lịch' : 'Tạm ẩn' }}</small>
+            </td>
+            <td class="actions">
+              <button (click)="open(item)">Sửa hồ sơ</button
+              ><button (click)="resetPassword(item)">Đặt lại mật khẩu</button
+              ><button (click)="remove(item)">Xóa</button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="6">{{ loading() ? 'Đang tải...' : 'Chưa có nhân viên.' }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  @if (meta(); as m) {
+    <div class="pagination">
+      <button class="button secondary" [disabled]="m.page <= 1" (click)="load(m.page - 1)">
+        Trước</button
+      ><span>{{ m.page }} / {{ m.totalPages || 1 }}</span
+      ><button
+        class="button secondary"
+        [disabled]="m.page >= m.totalPages"
+        (click)="load(m.page + 1)"
+      >
+        Sau
+      </button>
+    </div>
+  }
+  @if (editing() !== undefined) {
+    <div class="modal-backdrop" (click)="close()">
+      <form class="modal" (click)="$event.stopPropagation()" (ngSubmit)="save()">
+        <h2>{{ editing() ? 'Chỉnh sửa nhân viên' : 'Cấp tài khoản cho thợ' }}</h2>
+        <p class="account-note">
+          Email và mật khẩu bên dưới được dùng để thợ đăng nhập vào cổng nhân viên.
+        </p>
+        <div class="form-grid">
+          <label>Họ tên<input name="name" [(ngModel)]="form.fullName" required /></label
+          ><label
+            >Email đăng nhập<input
+              name="email"
+              type="email"
+              [(ngModel)]="form.email"
+              required /></label
+          ><label>Điện thoại<input name="phone" [(ngModel)]="form.phone" /></label
+          ><label
+            >Mật khẩu đăng nhập {{ editing() ? '(để trống nếu giữ nguyên)' : ''
+            }}<input
+              name="password"
+              type="password"
+              [(ngModel)]="form.password"
+              [required]="!editing()"
+              minlength="8" /></label
+          ><label class="wide"
+            >Ảnh đại diện URL<input name="avatar" [(ngModel)]="form.avatarUrl" /></label
+          ><label class="wide"
+            >Tải ảnh đại diện<input
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              (change)="upload($event)" /></label
+          ><label>Chuyên môn<input name="specialties" [(ngModel)]="form.specialties" /></label
+          ><label
+            >Kinh nghiệm<input
+              name="years"
+              type="number"
+              min="0"
+              [(ngModel)]="form.yearsOfExperience" /></label
+          ><label
+            >Trạng thái<select name="status" [(ngModel)]="form.status">
+              <option value="ACTIVE">Hoạt động</option>
+              <option value="INACTIVE">Tạm ngưng</option>
+              <option value="BLOCKED">Bị khóa</option>
+            </select></label
+          ><label class="check"
+            ><input name="bookable" type="checkbox" [(ngModel)]="form.isBookable" /> Cho phép nhận
+            lịch</label
+          ><label class="wide"
+            >Giới thiệu<textarea name="bio" [(ngModel)]="form.bio"></textarea>
+          </label>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="button secondary" (click)="close()">Hủy</button
+          ><button class="button" [disabled]="saving()">
+            {{ saving() ? 'Đang lưu...' : 'Lưu tài khoản' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  }
+</section>

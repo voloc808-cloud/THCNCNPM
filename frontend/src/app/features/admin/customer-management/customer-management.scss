@@ -1,0 +1,4 @@
+@use '../admin-common';
+.password-modal { width: min(480px, 100%); }
+.password-customer { margin: -8px 0 18px; color: #b6a996; font-size: 13px; }
+.password-hint { margin: 14px 0; color: #8f867b; font-size: 12px; line-height: 1.5; }

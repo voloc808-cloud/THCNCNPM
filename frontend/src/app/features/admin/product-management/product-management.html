@@ -1,0 +1,127 @@
+<section class="admin-page">
+  <header class="page-head">
+    <div>
+      <p class="eyebrow">ROYAL STORE</p>
+      <h1>Quản lý sản phẩm.</h1>
+      <p>Danh mục, giá bán, tồn kho và trạng thái kinh doanh.</p>
+    </div>
+    <div class="head-actions">
+      <button class="button secondary" (click)="addCategory()">+ Danh mục</button
+      ><button class="button" (click)="open()">+ Sản phẩm</button>
+    </div>
+  </header>
+  <div class="categories">
+    @for (c of categories(); track c.id) {
+      <span
+        >{{ c.name }} <small>{{ c._count?.products || 0 }}</small
+        ><button (click)="removeCategory(c)">×</button></span
+      >
+    }
+  </div>
+  <div class="toolbar">
+    <input [(ngModel)]="search" (keyup.enter)="refresh()" placeholder="Tên hoặc mã SKU..." /><button
+      class="button secondary"
+      (click)="refresh()"
+    >
+      Tìm
+    </button>
+  </div>
+  @if (error()) {
+    <p class="error">{{ error() }}</p>
+  }
+  @if (notice()) {
+    <p class="notice">{{ notice() }}</p>
+  }
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Sản phẩm</th>
+          <th>Danh mục</th>
+          <th>Giá</th>
+          <th>Tồn kho</th>
+          <th>Trạng thái</th>
+          <th>Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of items(); track item.id) {
+          <tr>
+            <td>
+              <strong>{{ item.name }}</strong
+              ><br /><small>{{ item.sku }}</small>
+            </td>
+            <td>{{ item.category?.name || '—' }}</td>
+            <td>{{ item.price | currency: 'VND' : 'symbol' : '1.0-0' : 'vi-VN' }}</td>
+            <td>{{ item.stock }}</td>
+            <td>
+              <span class="status" [class.ACTIVE]="item.isActive">{{
+                item.isActive ? 'Đang bán' : 'Đang ẩn'
+              }}</span>
+            </td>
+            <td class="actions">
+              <button (click)="open(item)">Sửa</button><button (click)="remove(item)">Xóa</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  @if (meta(); as m) {
+    <div class="pagination">
+      <button class="button secondary" [disabled]="m.page <= 1" (click)="refresh(m.page - 1)">
+        Trước</button
+      ><span>{{ m.page }} / {{ m.totalPages || 1 }}</span
+      ><button
+        class="button secondary"
+        [disabled]="m.page >= m.totalPages"
+        (click)="refresh(m.page + 1)"
+      >
+        Sau
+      </button>
+    </div>
+  }
+  @if (editing() !== undefined) {
+    <div class="modal-backdrop" (click)="close()">
+      <form class="modal" (click)="$event.stopPropagation()" (ngSubmit)="save()">
+        <h2>{{ editing() ? 'Chỉnh sửa' : 'Thêm' }} sản phẩm</h2>
+        <div class="form-grid">
+          <label>Tên<input name="name" [(ngModel)]="form.name" required /></label
+          ><label>SKU<input name="sku" [(ngModel)]="form.sku" required /></label
+          ><label
+            >Danh mục<select name="category" [(ngModel)]="form.categoryId">
+              <option value="">Không phân loại</option>
+              @for (c of categories(); track c.id) {
+                <option [value]="c.id">{{ c.name }}</option>
+              }
+            </select></label
+          ><label>Giá<input name="price" type="number" min="1" [(ngModel)]="form.price" /></label
+          ><label
+            >Tồn kho<input name="stock" type="number" min="0" [(ngModel)]="form.stock" /></label
+          ><label
+            >Thứ tự<input name="sort" type="number" min="0" [(ngModel)]="form.sortOrder" /></label
+          ><label class="wide">Ảnh URL<input name="image" [(ngModel)]="form.imageUrl" /></label
+          ><label class="wide"
+            >Hoặc tải ảnh<input
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              (change)="upload($event)" /></label
+          ><label class="wide"
+            >Mô tả<textarea
+              name="description"
+              [(ngModel)]="form.description"
+              required
+            ></textarea></label
+          ><label class="check wide"
+            ><input name="active" type="checkbox" [(ngModel)]="form.isActive" /> Đang kinh
+            doanh</label
+          >
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="button secondary" (click)="close()">Hủy</button
+          ><button class="button">Lưu</button>
+        </div>
+      </form>
+    </div>
+  }
+</section>
